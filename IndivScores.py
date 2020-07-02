@@ -8,20 +8,17 @@ class IndivScores(object):
 	def __init__(self):
 
 		'''
-		MAYBE ALWAYS RELATE TO CURRENT DATE?
+		TODO:
 
-		#reference point for score determination
-		self.refdate =
-		#values have to be younger than this date
-		self.pastdate =
+		determine goal date here for sql request
 		'''
 
 		print("Individual Scores: Initialized.")
 
 	def main():
 		IndivScores.config()
-		#IndivScores.connect()
-		IndivScores.getn()
+		
+		
 	def config(filename='database.ini', section='postgresql'):
 	    # create a parser
 	    parser = ConfigParser()
@@ -72,34 +69,37 @@ class IndivScores(object):
 
 
 	'''Get total amount of values, while values are received every 30 seconds'''
-	def getn():#persID, days):
-		query = 'SELECT * FROM usecase'
+	def getn(persID):#, date):
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID)) #' AND date >= ' + str(date) 
 		temp = IndivScores.connect(query)
 		print(temp)
 		return 30
 
 	'''Functions below calculate value between 0 and 1 – Use Cases 1 & 3'''
-	def getSpeedVal(persID, days):
+	def getSpeedVal(persID, date):
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID =' + persID)
+		temp = IndivScores.connect(query)
+		print(temp)
 		return 0.5
 
-	def getTurnVal(persID, days):
+	def getTurnVal(persID, date):
 		return 0.5
 
-	def getBrakeVal(persID, days):
+	def getBrakeVal(persID, date):
 		return 0.5
 
-	def getCrashVal(persID, days):
+	def getCrashVal(persID, date):
 		return 0.5
 
 	'''Functions below calulate positive values – Use Case 3'''
-	def getAvgSpeed(persID, days):
+	def getAvgSpeed(persID, date):
 		return 50
 
 	'''Functions below calulate positive values – Use Case 2'''
-	def getAvgTypeSpeed(typeID, days):
+	def getAvgTypeSpeed(typeID, date):
 		return 36
 
-	def getEnginePerf(typeID, days):
+	def getEnginePerf(typeID, date):
 		return 89
 
 if __name__ == '__main__':
