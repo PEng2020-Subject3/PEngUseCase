@@ -16,9 +16,9 @@ class IndivScores(object):
 
 	'''Get total amount of values, while values are received every 30 seconds'''
 	def getn(persID, days):
-		self.n = 30
+		return 30
 
-	'''Functions below calculate value between 0 and 1 – Use Cases 1 & 2 & 3'''
+	'''Functions below calculate value between 0 and 1 – Use Cases 1 & 3'''
 	def getSpeedVal(persID, days):
 		return 0.5
 
@@ -31,9 +31,13 @@ class IndivScores(object):
 	def getCrashVal(persID, days):
 		return 0.5
 
-	'''Functions below calulate positive values – Use Cases 2 & 3'''
+	'''Functions below calulate positive values – Use Case 3'''
 	def getAvgSpeed(persID, days):
 		return 50
 
-	def getEnginePerf(persID, days):
+	'''Functions below calulate positive values – Use Case 2'''
+	def getAvgTypeSpeed(typeID, days):
+		return 36
+
+	def getEnginePerf(typeID, days):
 		return 89

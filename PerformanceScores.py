@@ -1,19 +1,48 @@
-import IndivScores as indiv
+from IndivScores import IndivScores as indiv
 import json
 
-class Performance Scores(object):
-	def __init__(self, pubID, days):
-		self.speedscore = indiv.getSpeedVal()
-		self.turnscore = indiv.getTurnVal()
-		self.brakescore = indiv.getBrakeVal()
-		self.crashscore = indiv.getCrashVal()
-
-		#indiv ID
-		self.pubID = pubID
-		#range of days that values shall be calculated for
+'''Functions in this class create a json containing respective information'''
+class PerformanceScores(object):
+	def __init__(self, method, typeID, days):
+		self.method = method
+		self.typeID = typeID
 		self.days = days
 
+		self.logs = indiv.getn(typeID, days)
+		self.speedscore = indiv.getSpeedVal(typeID, days)
+		self.turnscore = indiv.getTurnVal(typeID, days)
+		self.brakescore = indiv.getBrakeVal(typeID, days)
+		self.crashscore = indiv.getCrashVal(typeID, days)
+		self.avgspeed = indiv.getAvgSpeed(typeID, days)
 
-		print("Driver Scores: Initialized.")
-	'''Create json with performance data so that engineer knows how cars are used'''
-	def getRequirements(self):
+	def main(self):
+		if (self.method == "genPerformanceScore"):
+			return self.genPerformanceScore()
+		else:
+			print("Unknown Method!")
+
+	def genPerformanceScore(self):
+		perf = self.getPerformanceScore()
+
+		uc_2raw = {
+			'general': {
+				'typeID': self.typeID,
+				'days': self.days,
+				'logs': self.logs
+			},
+			'scores': {
+				'performancescore': perf,
+				'speedscore': self.speedscore,
+				'turnscore': self.turnscore,
+				'brakescore': self.brakescore,
+				'crashscore': self.crashscore,
+				'avgspeed': self.avgspeed
+			}
+		}
+
+		uc_2 = json.dumps(uc_2raw, indent=2)
+
+		return uc_2
+
+	def getPerformanceScore(self):
+		return 100
