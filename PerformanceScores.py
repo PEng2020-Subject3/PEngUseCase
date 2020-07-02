@@ -1,7 +1,7 @@
 import IndivScores as indiv
 import json
 
-class Performance Scores:
+class Performance Scores(object):
 	def __init__(self, pubID, days):
 		self.speedscore = indiv.getSpeedVal()
 		self.turnscore = indiv.getTurnVal()
