@@ -34,14 +34,13 @@ class IndivScores():
 
 	#based on https://www.postgresqltutorial.com/postgresql-python/connect/
 	def connect(query):
-	    """ Connect to the PostgreSQL database server """
+	    '''Connect to the PostgreSQL database server'''
 	    conn = None
 	    try:
 	        # read connection parameters
 	        params = IndivScores.config()
 
 	        # connect to the PostgreSQL server
-	        #print('Connecting to the PostgreSQL database...')
 	        conn = psycopg2.connect(**params)
 
 	        # create a cursor
@@ -62,65 +61,89 @@ class IndivScores():
 	    finally:
 	        if conn is not None:
 	            conn.close()
-	            #print('Database connection closed.')
 
+	'''Get from date'''
+	def getdate(days):
+		'''
+		TODO:
 
-	'''Get total amount of values, while values are received every 30 seconds'''
-	def getn(persID):#, date):
+		calculate from date based on current_date and days
+		'''
+
+		return '2000-01-01'
+
+	'''Get total amount of values, while values are received every XX seconds'''
+	def getn(persID, days):
+		date = getdate(days)
 		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID)) #' AND date >= ' + str(date)
 		result = IndivScores.connect(query)
 
 		return result
 
-	'''Functions below calculate value between 0 and 1 – Use Cases 1 & 3'''
-	def getSpeedVal(persID, date):
+	'''Functions below calculate values between 0 and 1 – Use Cases 1 & 3'''
+	def getSpeedVal(persID, days):
 		n = getn(persID, date)
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID =' + persID + ' AND speedev = 1') #' AND date >= ' + str(date)
+		date = getdate(days)
+
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND speedev = 1') #' AND date >= ' + str(date)
 		temp = IndivScores.connect(query)
 		result = (temp / n)
 
 		return result
 
-	def getTurnVal(persID, date):
+	def getTurnVal(persID, days):
 		n = getn(persID, date)
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID =' + persID + ' AND turnev = 1') #' AND date >= ' + str(date)
-		temp = IndivScores.connect(query)
-		result = (temp / n)
+		date = getdate(days)
 
-		return result
-	def getBrakeVal(persID, date):
-		n = getn(persID, date)
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID =' + persID + ' AND brakeev = 1') #' AND date >= ' + str(date)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND turnev = 1') #' AND date >= ' + str(date)
 		temp = IndivScores.connect(query)
 		result = (temp / n)
 
 		return result
 
-	def getCrashVal(persID, date):
+	def getBrakeVal(persID, days):
 		n = getn(persID, date)
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID =' + persID + ' AND crashev = 1') #' AND date >= ' + str(date)
+		date = getdate(days)
+
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND brakeev = 1') #' AND date >= ' + str(date)
+		temp = IndivScores.connect(query)
+		result = (temp / n)
+
+		return result
+
+	def getCrashVal(persID, days):
+		n = getn(persID, date)
+		date = getdate(days)
+
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND crashev = 1') #' AND date >= ' + str(date)
 		temp = IndivScores.connect(query)
 		result = (temp / n)
 
 		return result
 
 	'''Functions below calulate positive values – Use Case 3'''
-	def getAvgSpeed(persID, date):
-		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE persID =' + persID + ' AND date >= ' + str(date))
+	def getAvgSpeed(persID, days):
+		date = getdate(days)
+
+		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE persID = ' + persID + ' AND date >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
 
 
 	'''Functions below calulate positive values – Use Case 2'''
-	def getAvgTypeSpeed(typeID, date):
-		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE persID =' + typeID + ' AND date >= ' + str(date))
+	def getAvgTypeSpeed(typeID, days):
+		date = getdate(days)
+
+		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE persID = ' + typeID + ' AND date >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
 
-	def getEnginePerf(typeID, date):
-		query = str('SELECT to_char(AVG(performance)) FROM usecase WHERE persID =' + typeID + ' AND date >= ' + str(date))
+	def getEnginePerf(typeID, days):
+		date = getdate(days)
+
+		query = str('SELECT to_char(AVG(performance)) FROM usecase WHERE persID = ' + typeID + ' AND date >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result

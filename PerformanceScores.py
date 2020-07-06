@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from IndivScores import IndivScores as indiv
 import json
 

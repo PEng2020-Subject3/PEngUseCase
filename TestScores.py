@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from DriverScores import DriverScores
 from IndivScores import IndivScores
 from PerformanceScores import PerformanceScores
