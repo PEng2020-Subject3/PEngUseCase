@@ -14,6 +14,7 @@ class IndivScores():
 	determine goal date here for sql request
 	'''
 
+	#from https://www.postgresqltutorial.com/postgresql-python/connect/
 	def config(filename='database.ini', section='postgresql'):
 	    # create a parser
 	    parser = ConfigParser()
@@ -31,6 +32,7 @@ class IndivScores():
 
 	    return db
 
+	#based on https://www.postgresqltutorial.com/postgresql-python/connect/
 	def connect(query):
 	    """ Connect to the PostgreSQL database server """
 	    conn = None
