@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from indiv-scores.IndivScores import IndivScores
+from IndivScores import IndivScores
 import json
 
 '''Handles DriverScore Function'''

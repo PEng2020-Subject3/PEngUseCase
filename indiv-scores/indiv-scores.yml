@@ -6,4 +6,4 @@ functions:
   indiv-scores:
     lang: python3
     handler: ./indiv-scores
-    image: indiv-scores:latest
+    image: elgeilo/indiv-scores:latest
