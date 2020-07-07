@@ -1,7 +1,15 @@
+#!/usr/bin/python
+from driver-scores.DriverScores import DriverScores
+import json
+
+'''Handles DriverScore Function'''
 def handle(req):
-    """handle a request to the function
-    Args:
-        req (str): request body
-    """
-    print(req)
-    return req
+    json_req = json.loads(req)
+    method = json_req["method"]
+    persID = json_req["persID"]
+    days = json_req["url"]
+
+    temp = DriverScores.DriverScores(method, persID, days)
+    output = temp.main()
+
+    return output
