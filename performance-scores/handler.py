@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from performance-scores.PerformanceScores import PerformanceScores
+from .PerformanceScores import PerformanceScores
 import json
 
 '''Handles PerformanceScore Function'''

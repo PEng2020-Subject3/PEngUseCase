@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from driver-scores.DriverScores import DriverScores
+from .DriverScores import DriverScores
 import json
 
 '''Handles DriverScore Function'''
