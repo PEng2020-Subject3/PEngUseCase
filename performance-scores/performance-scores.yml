@@ -6,4 +6,4 @@ functions:
   performance-scores:
     lang: python3
     handler: ./performance-scores
-    image: performance-scores:latest
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:latest
