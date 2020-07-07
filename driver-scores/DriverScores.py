@@ -17,13 +17,13 @@ class DriverScores(object):
 			print("Unknown Method!")
 
 	def getData(self, class):
-		reqraw = {
+		req_raw = {
 			'id': self.persID,
 			'days': self.days,
-			'scoretype': driverscore
+			'scoretype': "driverscore"
 		}
 
-		req = json.dumps(reqraw, indent=2)
+		req = json.dumps(req_raw, indent=2)
 
 		'''
 		TODO:

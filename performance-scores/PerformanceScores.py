@@ -15,13 +15,13 @@ class PerformanceScores(object):
 			print("Unknown Method!")
 
 	def getData(self, class):
-		reqraw = {
+		req_raw = {
 			'id': self.typeID,
 			'days': self.days,
-			'scoretype': performancescore
+			'scoretype': "performancescore"
 		}
 
-		req = json.dumps(reqraw, indent=2)
+		req = json.dumps(req_raw, indent=2)
 
 		'''
 		TODO:
@@ -38,10 +38,10 @@ class PerformanceScores(object):
 		self.brakescore = res["brakescore"]
 		self.crashscore = res["crashscore"]
 		self.avgspeed = res["avgspeed"]
+		self.engperf = res["engperf"]
 
 	def genPerformanceScore(self):
 		self.getData()
-		perf = self.getPerformanceScore()
 
 		uc_2raw = {
 			'general': {
@@ -50,7 +50,7 @@ class PerformanceScores(object):
 				'logs': self.logs
 			},
 			'scores': {
-				'performancescore': perf,
+				'performancescore': self.engperf,
 				'speedscore': self.speedscore,
 				'turnscore': self.turnscore,
 				'brakescore': self.brakescore,
@@ -62,6 +62,3 @@ class PerformanceScores(object):
 		uc_2 = json.dumps(uc_2raw, indent=2)
 
 		return uc_2
-
-	def getPerformanceScore(self):
-		return 100

@@ -11,9 +11,12 @@ class IndivScores(Object):
 
 	def main(self):
 		if (scoretype == driverscore):
-			pass
+			return self.getDriverscoreData()
 		elif (scoretype == performancescore):
-			pass	
+			return self.getPerfscoreData()
+		else:
+			print("Undefined Data Requested.")
+			exit()
 
 	#from https://www.postgresqltutorial.com/postgresql-python/connect/
 	def config(filename='database.ini', section='postgresql'):
@@ -64,20 +67,58 @@ class IndivScores(Object):
 	            conn.close()
 
 	'''Packs JSON with use case-specific data '''
-	def getUseCaseOneObject(self):
-		persID = self.persID
-		days = self.days
+	def getDriverscoreData(self):
+		self.speedscore = IndivScores.getSpeedVal(self.id, self.days)
+		self.turnscore = IndivScores.getTurnVal(self.id, self.days)
+		self.brakescore = IndivScores.getBrakeVal(self.id, self.days)
+		self.crashscore = IndivScores.getCrashVal(self.id, self.days)
+		self.avgspeed = IndivScores.getAvgSpeed(self.id, self.days)
 
-		self.speedscore = IndivScores.getSpeedVal(persID, days)
-		self.turnscore = IndivScores.getTurnVal(persID, days)
-		self.brakescore = IndivScores.getBrakeVal(persID, days)
-		self.crashscore = IndivScores.getCrashVal(persID, days)
+		return packJSON()
 
-	def getUseCaseTwoObject(self):
+	def getPerfscoreData(self):
+		self.logs = IndivScores.getn(self.id, self.days)
+		self.speedscore = IndivScores.getSpeedVal(self.id, self.days)
+		self.turnscore = IndivScores.getTurnVal(self.id, self.days)
+		self.brakescore = IndivScores.getBrakeVal(self.id, self.days)
+		self.crashscore = IndivScores.getCrashVal(self.id, self.days)
+		self.avgspeed = IndivScores.getAvgTypeSpeed(self.id, self.days)
+		self.engperf = IndivScores.getEnginePerf(self.id, self.days)
 
+		return packJSON()
 
-	def getUseCaseThreeObject(self):
+	def packJSON(self):
+		if (scoretype == driverscore):
+			res_raw = {
+				'speedscore': self.speedscore,
+				'turnscore': self.turnscore,
+				'brakescore': self.brakescore,
+				'crashscore': self.crashscore,
+				'avgspeed': self.avgspeed
+			}
 
+			res = json.dumps(res_raw, indent=2)
+
+			return res
+
+		elif (scoretype == performancescore):
+			res_raw = {
+				'logs': self.logs,
+				'speedscore': self.speedscore,
+				'turnscore': self.turnscore,
+				'brakescore': self.brakescore,
+				'crashscore': self.crashscore,
+				'avgspeed': self.avgspeed,
+				'engperf': self.engperf
+			}
+
+			res = json.dumps(res_raw, indent=2)
+
+			return res
+
+		else:
+			print("Undefined Data Requested.")
+			exit()
 
 	'''Get from date'''
 	def getdate(days):
@@ -91,8 +132,8 @@ class IndivScores(Object):
 
 	'''Get total amount of values, while values are received every XX seconds'''
 	def getn(persID, days):
-		date = getdate(days)
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID)) #' AND date >= ' + str(date)
+		date = getdate(self.days)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND date >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
@@ -102,7 +143,7 @@ class IndivScores(Object):
 		n = getn(persID, date)
 		date = getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND speedev = 1') #' AND date >= ' + str(date)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND speedev = 1 AND date >= ' + str(date))
 		temp = IndivScores.connect(query)
 		result = (temp / n)
 
@@ -112,7 +153,7 @@ class IndivScores(Object):
 		n = getn(persID, date)
 		date = getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND turnev = 1') #' AND date >= ' + str(date)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND turnev = 1 AND date >= ' + str(date))
 		temp = IndivScores.connect(query)
 		result = (temp / n)
 
@@ -122,7 +163,7 @@ class IndivScores(Object):
 		n = getn(persID, date)
 		date = getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND brakeev = 1') #' AND date >= ' + str(date)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND brakeev = 1 AND date >= ' + str(date))
 		temp = IndivScores.connect(query)
 		result = (temp / n)
 
@@ -132,7 +173,7 @@ class IndivScores(Object):
 		n = getn(persID, date)
 		date = getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND crashev = 1') #' AND date >= ' + str(date)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND crashev = 1 AND date >= ' + str(date))
 		temp = IndivScores.connect(query)
 		result = (temp / n)
 
@@ -152,7 +193,7 @@ class IndivScores(Object):
 	def getAvgTypeSpeed(typeID, days):
 		date = getdate(days)
 
-		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE persID = ' + typeID + ' AND date >= ' + str(date))
+		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE typeID = ' + typeID + ' AND date >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
@@ -160,7 +201,7 @@ class IndivScores(Object):
 	def getEnginePerf(typeID, days):
 		date = getdate(days)
 
-		query = str('SELECT to_char(AVG(performance)) FROM usecase WHERE persID = ' + typeID + ' AND date >= ' + str(date))
+		query = str('SELECT to_char(AVG(performance)) FROM usecase WHERE typeID = ' + typeID + ' AND date >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
