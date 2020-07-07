@@ -3,7 +3,7 @@ from configparser import ConfigParser
 import psycopg2
 
 '''This class calculates individual scores based on information received from a database that can be further processed.'''
-class IndivScores(Object):
+class IndivScores(object):
 	def __init__(self, id, days, scoretype):
 		self.id = id
 		self.days = days
