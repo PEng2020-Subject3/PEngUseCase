@@ -1,9 +1,17 @@
 #!/usr/bin/python
-.import IndivScores
+import IndivScores
 import json
 
-'''Handles DriverScore Function'''
-def handle(req):
+class test:
+
+    req_raw = {
+        'id': 1,
+        'days': 1,
+        'scoretype': "driverscore"
+    }
+
+    req = json.dumps(req_raw, indent=2)
+
     json_req = json.loads(req)
     id = json_req["id"]
     days = json_req["days"]
@@ -12,4 +20,4 @@ def handle(req):
     temp = IndivScores.IndivScores(id, days, scoretype)
     output = temp.main()
 
-    return output
+    print(output)

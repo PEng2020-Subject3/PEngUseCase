@@ -1,6 +1,8 @@
 #!/usr/bin/python
+from __future__ import division
 from configparser import ConfigParser
 import psycopg2
+import json
 
 '''This class calculates individual scores based on information received from a database that can be further processed.'''
 class IndivScores(object):
@@ -11,9 +13,10 @@ class IndivScores(object):
 
 	def main(self):
 		self.initTables()
-		if (scoretype == driverscore):
+
+		if (self.scoretype == "driverscore"):
 			return self.getDriverscoreData()
-		elif (scoretype == performancescore):
+		elif (self.scoretype == "performancescore"):
 			return self.getPerfscoreData()
 		else:
 			print("Undefined Data Requested.")
@@ -75,7 +78,7 @@ class IndivScores(object):
 		self.crashscore = IndivScores.getCrashVal(self.id, self.days)
 		self.avgspeed = IndivScores.getAvgSpeed(self.id, self.days)
 
-		return packJSON()
+		return self.packJSON()
 
 	def getPerfscoreData(self):
 		self.logs = IndivScores.getn(self.id, self.days)
@@ -86,10 +89,10 @@ class IndivScores(object):
 		self.avgspeed = IndivScores.getAvgTypeSpeed(self.id, self.days)
 		self.engperf = IndivScores.getEnginePerf(self.id, self.days)
 
-		return packJSON()
+		return self.packJSON()
 
 	def packJSON(self):
-		if (scoretype == driverscore):
+		if (self.scoretype == "driverscore"):
 			res_raw = {
 				'speedscore': self.speedscore,
 				'turnscore': self.turnscore,
@@ -102,7 +105,7 @@ class IndivScores(object):
 
 			return res
 
-		elif (scoretype == performancescore):
+		elif (self.scoretype == "performancescore"):
 			res_raw = {
 				'logs': self.logs,
 				'speedscore': self.speedscore,
@@ -133,63 +136,63 @@ class IndivScores(object):
 
 	'''Create tables if they do not exist yet'''
 	def initTables(self):
-		query = str('CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,date date NOT NULL)')
+		query = str('CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL)')
 		IndivScores.connect(query)
 
 	'''Get total amount of values, while values are received every XX seconds'''
 	def getn(persID, days):
-		date = getdate(self.days)
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND date >= ' + str(date))
+		date = IndivScores.getdate(days)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND targetdate >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
 
 	'''Functions below calculate values between 0 and 1 – Use Cases 1 & 3'''
 	def getSpeedVal(persID, days):
-		n = getn(persID, date)
-		date = getdate(days)
+		n = IndivScores.getn(persID, days)
+		date = IndivScores.getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND speedev = 1 AND date >= ' + str(date))
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND speedev = 1')# AND targetdate >= ' + str(date))
 		temp = IndivScores.connect(query)
-		result = (temp / n)
+		result = 1#(temp / n)
 
 		return result
 
 	def getTurnVal(persID, days):
-		n = getn(persID, date)
-		date = getdate(days)
+		n = IndivScores.getn(persID, days)
+		date = IndivScores.getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND turnev = 1 AND date >= ' + str(date))
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND turnev = 1')# AND targetdate >= ' + str(date))
 		temp = IndivScores.connect(query)
-		result = (temp / n)
+		result = 1#(temp / n)
 
 		return result
 
 	def getBrakeVal(persID, days):
-		n = getn(persID, date)
-		date = getdate(days)
+		n = IndivScores.getn(persID, days)
+		date = IndivScores.getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND brakeev = 1 AND date >= ' + str(date))
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND brakeev = 1')# AND targetdate >= ' + str(date))
 		temp = IndivScores.connect(query)
-		result = (temp / n)
+		result = 1#(temp / n)
 
 		return result
 
 	def getCrashVal(persID, days):
-		n = getn(persID, date)
-		date = getdate(days)
+		n = IndivScores.getn(persID, days)
+		date = IndivScores.getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + persID + ' AND crashev = 1 AND date >= ' + str(date))
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND crashev = 1')# AND targetdate >= ' + str(date))
 		temp = IndivScores.connect(query)
-		result = (temp / n)
+		result = 1#(temp / n)
 
 		return result
 
 	'''Functions below calulate positive values – Use Case 3'''
 	def getAvgSpeed(persID, days):
-		date = getdate(days)
+		date = IndivScores.getdate(days)
 
-		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE persID = ' + persID + ' AND date >= ' + str(date))
+		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE persID = ' + str(persID))# + ' AND targetdate >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
@@ -197,17 +200,17 @@ class IndivScores(object):
 
 	'''Functions below calulate positive values – Use Case 2'''
 	def getAvgTypeSpeed(typeID, days):
-		date = getdate(days)
+		date = IndivScores.getdate(days)
 
-		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE typeID = ' + typeID + ' AND date >= ' + str(date))
+		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE typeID = ' + str(typeID))# + ' AND targetdate >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
 
 	def getEnginePerf(typeID, days):
-		date = getdate(days)
+		date = IndivScores.getdate(days)
 
-		query = str('SELECT to_char(AVG(performance)) FROM usecase WHERE typeID = ' + typeID + ' AND date >= ' + str(date))
+		query = str('SELECT to_char(AVG(performance)) FROM usecase WHERE typeID = ' + str(typeID))# + ' AND targetdate >= ' + str(date))
 		result = IndivScores.connect(query)
 
 		return result
