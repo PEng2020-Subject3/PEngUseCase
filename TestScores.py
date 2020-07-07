@@ -1,8 +1,7 @@
 #!/usr/bin/python
-from DriverScores import DriverScores
-from IndivScores import IndivScores
-from PerformanceScores import PerformanceScores
-import DriverScores
+from driver-scores.DriverScores import DriverScores
+from indiv-scores.IndivScores import IndivScores
+from performance-scores.PerformanceScores import PerformanceScores
 
 class TestScores:
     output = DriverScores.DriverScores("genDriverScore", 2, 2)
