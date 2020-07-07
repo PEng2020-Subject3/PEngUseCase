@@ -1,4 +1,3 @@
-pg_config-binary
 configparser
 psycopg2-binary
 
