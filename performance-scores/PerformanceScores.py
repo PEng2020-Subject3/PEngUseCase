@@ -1,5 +1,4 @@
 #!/usr/bin/python
-from IndivScores import IndivScores as indiv
 import json
 
 '''Functions in this class create a json containing respective information'''
@@ -9,20 +8,39 @@ class PerformanceScores(object):
 		self.typeID = typeID
 		self.days = days
 
-		self.logs = indiv.getn(typeID, days)
-		self.speedscore = indiv.getSpeedVal(typeID, days)
-		self.turnscore = indiv.getTurnVal(typeID, days)
-		self.brakescore = indiv.getBrakeVal(typeID, days)
-		self.crashscore = indiv.getCrashVal(typeID, days)
-		self.avgspeed = indiv.getAvgSpeed(typeID, days)
-
 	def main(self):
 		if (self.method == "genPerformanceScore"):
 			return self.genPerformanceScore()
 		else:
 			print("Unknown Method!")
 
+	def getData(self, class):
+		reqraw = {
+			'id': self.typeID,
+			'days': self.days,
+			'scoretype': performancescore
+		}
+
+		req = json.dumps(reqraw, indent=2)
+
+		'''
+		TODO:
+
+		connect to IndivScores, send req and get res!!
+
+		'''
+
+		json_res = json.loads(res)
+
+		self.logs = res["logs"]
+		self.speedscore = res["speedscore"]
+		self.turnscore = res["turnscore"]
+		self.brakescore = res["brakescore"]
+		self.crashscore = res["crashscore"]
+		self.avgspeed = res["avgspeed"]
+
 	def genPerformanceScore(self):
+		self.getData()
 		perf = self.getPerformanceScore()
 
 		uc_2raw = {

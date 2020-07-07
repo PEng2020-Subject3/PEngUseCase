@@ -2,17 +2,18 @@
 from configparser import ConfigParser
 import psycopg2
 
-#just for testing
-if __name__ == '__main__':
-	IndivScores.main()
-
 '''This class calculates individual scores based on information received from a database that can be further processed.'''
-class IndivScores():
-	'''
-	TODO:
+class IndivScores(Object):
+	def __init__(self, id, days, scoretype):
+		self.id = id
+		self.days = days
+		self.scoretype = scoretype
 
-	determine goal date here for sql request
-	'''
+	def main(self):
+		if (scoretype == driverscore):
+			pass
+		elif (scoretype == performancescore):
+			pass	
 
 	#from https://www.postgresqltutorial.com/postgresql-python/connect/
 	def config(filename='database.ini', section='postgresql'):
@@ -61,6 +62,22 @@ class IndivScores():
 	    finally:
 	        if conn is not None:
 	            conn.close()
+
+	'''Packs JSON with use case-specific data '''
+	def getUseCaseOneObject(self):
+		persID = self.persID
+		days = self.days
+
+		self.speedscore = IndivScores.getSpeedVal(persID, days)
+		self.turnscore = IndivScores.getTurnVal(persID, days)
+		self.brakescore = IndivScores.getBrakeVal(persID, days)
+		self.crashscore = IndivScores.getCrashVal(persID, days)
+
+	def getUseCaseTwoObject(self):
+
+
+	def getUseCaseThreeObject(self):
+
 
 	'''Get from date'''
 	def getdate(days):

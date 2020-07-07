@@ -1,5 +1,4 @@
 #!/usr/bin/python
-from IndivScores import IndivScores as indiv
 import json
 
 '''Functions in this class create a json containing respective information'''
@@ -9,12 +8,6 @@ class DriverScores(object):
 		self.persID = persID
 		self.days = days
 
-		self.speedscore = indiv.getSpeedVal(persID, days)
-		self.turnscore = indiv.getTurnVal(persID, days)
-		self.brakescore = indiv.getBrakeVal(persID, days)
-		self.crashscore = indiv.getCrashVal(persID, days)
-		self.avgspeed = indiv.getAvgSpeed(persID, days)
-
 	def main(self):
 		if (self.method == "genDriverScore"):
 			return self.genDriverScore()
@@ -23,8 +16,33 @@ class DriverScores(object):
 		else:
 			print("Unknown Method!")
 
+	def getData(self, class):
+		reqraw = {
+			'id': self.persID,
+			'days': self.days,
+			'scoretype': driverscore
+		}
+
+		req = json.dumps(reqraw, indent=2)
+
+		'''
+		TODO:
+
+		connect to db, send req and get res!!
+
+		'''
+
+		json_res = json.loads(res)
+
+		self.speedscore = res["speedscore"]
+		self.turnscore = res["turnscore"]
+		self.brakescore = res["brakescore"]
+		self.crashscore = res["crashscore"]
+		self.avgspeed = res["avgspeed"]
+
 	'''Dashboard Information – Use Case 1'''
 	def genDriverScore(self):
+		self.getData()
 		score = self.getDriverScore()
 
 		uc_1raw = {
@@ -57,7 +75,3 @@ class DriverScores(object):
 
 		uc_13 = json.dumps(uc_13raw, indent=2)
 		return uc_13
-
-	'''Would be nice to have a crash alert, but does not make really sense as long as database not dynamically created'''
-	#def getAlert(self):
-	#	self.days = 1
