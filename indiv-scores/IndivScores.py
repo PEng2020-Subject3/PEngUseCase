@@ -10,6 +10,7 @@ class IndivScores(Object):
 		self.scoretype = scoretype
 
 	def main(self):
+		self.initTables()
 		if (scoretype == driverscore):
 			return self.getDriverscoreData()
 		elif (scoretype == performancescore):
@@ -129,6 +130,11 @@ class IndivScores(Object):
 		'''
 
 		return '2000-01-01'
+
+	'''Create tables if they do not exist yet'''
+	def initTables(self):
+		query = str('CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,date date NOT NULL)')
+		IndivScores.connect(query)
 
 	'''Get total amount of values, while values are received every XX seconds'''
 	def getn(persID, days):
