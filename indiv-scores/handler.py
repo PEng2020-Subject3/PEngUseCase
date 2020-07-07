@@ -7,7 +7,7 @@ def handle(req):
     json_req = json.loads(req)
     id = json_req["id"]
     days = json_req["days"]
-    scoretyepe = json_req["scoretype"]
+    scoretype = json_req["scoretype"]
 
     temp = IndivScores.IndivScores(id, days, scoretype)
     output = temp.main()
