@@ -9,10 +9,7 @@ def handle(req):
     days = json_req["days"]
     scoretype = json_req["scoretype"]
 
-    #for testing
-    print("TEST: " + scoretype)
-
-    temp = IndivScores.IndivScores(id, days, scoretype)
+    temp = IndivScores(id, days, scoretype)
     output = temp.main()
 
     return output

@@ -14,9 +14,6 @@ class IndivScores(object):
 	def main(self):
 		self.initTables()
 
-		#for testing
-		print("TEST: " + self.scoretype)
-
 		if (self.scoretype == "driverscore"):
 			return self.getDriverscoreData()
 		elif (self.scoretype == "performancescore"):
@@ -39,7 +36,7 @@ class IndivScores(object):
 	        for param in params:
 	            db[param[0]] = param[1]
 	    else:
-	        raise Exception('Section {0} not found in the {1} file'.format(section, filename))
+	        raise Exception('DB connection missing.')#'Section {0} not found in the {1} file'.format(section, filename))
 
 	    return db
 
@@ -75,16 +72,11 @@ class IndivScores(object):
 
 	'''Packs JSON with use case-specific data '''
 	def getDriverscoreData(self):
-
-
 		self.speedscore = IndivScores.getSpeedVal(self.id, self.days)
 		self.turnscore = IndivScores.getTurnVal(self.id, self.days)
 		self.brakescore = IndivScores.getBrakeVal(self.id, self.days)
 		self.crashscore = IndivScores.getCrashVal(self.id, self.days)
 		self.avgspeed = IndivScores.getAvgSpeed(self.id, self.days)
-
-		#for testing
-	    #print("TEST: " + str(self.speedscore))
 
 		return self.packJSON()
 

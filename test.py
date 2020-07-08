@@ -16,11 +16,7 @@ class test:
         return output
 
 if __name__ == '__main__':
-    res_raw = {
-        'id': 1,
-        'days': 1,
-        'scoretype': driverscore
-    }
+    res_raw = {"id": 1,"days": 1,"scoretype": "driverscore"}
 
     res = json.dumps(res_raw, indent=2)
 
