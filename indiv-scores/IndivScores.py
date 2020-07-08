@@ -14,6 +14,9 @@ class IndivScores(object):
 	def main(self):
 		self.initTables()
 
+		#for testing
+		print("TEST: " + self.scoretype)
+
 		if (self.scoretype == "driverscore"):
 			return self.getDriverscoreData()
 		elif (self.scoretype == "performancescore"):
@@ -72,11 +75,16 @@ class IndivScores(object):
 
 	'''Packs JSON with use case-specific data '''
 	def getDriverscoreData(self):
+
+
 		self.speedscore = IndivScores.getSpeedVal(self.id, self.days)
 		self.turnscore = IndivScores.getTurnVal(self.id, self.days)
 		self.brakescore = IndivScores.getBrakeVal(self.id, self.days)
 		self.crashscore = IndivScores.getCrashVal(self.id, self.days)
 		self.avgspeed = IndivScores.getAvgSpeed(self.id, self.days)
+
+		#for testing
+	    print("TEST: " + self.speedscore)
 
 		return self.packJSON()
 
