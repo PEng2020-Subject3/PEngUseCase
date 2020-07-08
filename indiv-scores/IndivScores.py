@@ -36,7 +36,7 @@ class IndivScores(object):
 			"user": "postgres",
 			"password": "3BDAJjFHOA"
 		}
-		
+
 	    return db
 
 	#based on https://www.postgresqltutorial.com/postgresql-python/connect/
@@ -133,9 +133,10 @@ class IndivScores(object):
 
 		return '2000-01-01'
 
+	#IF NOT EXISTS
 	'''Create tables if they do not exist yet'''
 	def initTables(self):
-		query = str('CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL)')
+		query = str('CREATE TABLE usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL)')
 		IndivScores.connect(query)
 
 	'''Get total amount of values, while values are received every XX seconds'''
