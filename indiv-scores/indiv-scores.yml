@@ -6,4 +6,4 @@ functions:
   indiv-scores:
     lang: python3-debian
     handler: ./indiv-scores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-scores:latest #elgeilo/indiv-scores:latest
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-scores:latest

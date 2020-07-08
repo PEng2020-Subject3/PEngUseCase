@@ -142,13 +142,14 @@ class IndivScores(object):
 		query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
 		IndivScores.connect(query, "create")
 
-		stuff = str("INSERT INTO usecase VALUES (652, 'smart', 34, 60, true, false, true, false, '1997-12-27');")
-		IndivScores.connect(stuff, "insert")
-
-		query = str('SELECT * FROM usecase WHERE persID = 654;')
-		temp = IndivScores.connect(query, "display")
-		print("jetzt kommt's")
-		print(temp)
+		# FOR TESTING
+		# stuff = str("INSERT INTO usecase VALUES (652, 'smart', 34, 60, true, false, true, false, '1997-12-27');")
+		# IndivScores.connect(stuff, "insert")
+		#
+		# query = str('SELECT * FROM usecase WHERE persID = 654;')
+		# temp = IndivScores.connect(query, "display")
+		# print("jetzt kommt's")
+		# print(temp)
 
 	'''Get total amount of values, while values are received every XX seconds'''
 	def getn(persID, days):
@@ -165,7 +166,12 @@ class IndivScores(object):
 
 		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND speedev = TRUE')# AND targetdate >= ' + str(date))
 		temp = IndivScores.connect(query, "display")
-		result = 1#(temp / n)
+
+		if (n[0] != 0):
+			result = (temp[0] / n[0])
+		else:
+			print("No Matching DB Entries!")
+			exit()
 
 		return result
 
@@ -175,7 +181,12 @@ class IndivScores(object):
 
 		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND turnev = TRUE')# AND targetdate >= ' + str(date))
 		temp = IndivScores.connect(query, "display")
-		result = 1#(temp / n)
+
+		if (n[0] != 0):
+			result = (temp[0] / n[0])
+		else:
+			print("No Matching DB Entries!")
+			exit()
 
 		return result
 
@@ -185,7 +196,12 @@ class IndivScores(object):
 
 		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND brakeev = TRUE')# AND targetdate >= ' + str(date))
 		temp = IndivScores.connect(query, "display")
-		result = 1#(temp / n)
+
+		if (n[0] != 0):
+			result = (temp[0] / n[0])
+		else:
+			print("No Matching DB Entries!")
+			exit()
 
 		return result
 
@@ -195,7 +211,12 @@ class IndivScores(object):
 
 		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND crashev = TRUE')# AND targetdate >= ' + str(date))
 		temp = IndivScores.connect(query, "display")
-		result = 1#(temp / n)
+
+		if (n[0] != 0):
+			result = (temp[0] / n[0])
+		else:
+			print("No Matching DB Entries!")
+			exit()
 
 		return result
 
