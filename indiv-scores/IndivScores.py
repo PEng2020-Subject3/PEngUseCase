@@ -40,7 +40,7 @@ class IndivScores(object):
 	    return db
 
 	#based on https://www.postgresqltutorial.com/postgresql-python/connect/
-	def connect(query):
+	def connect(query, mode):
 	    '''Connect to the PostgreSQL database server'''
 	    conn = None
 	    try:
@@ -55,9 +55,13 @@ class IndivScores(object):
 
 			# execute a statement
 	        cur.execute(query)
+	        db_version = None
 
-	        # display the PostgreSQL database server version
-	        db_version = cur.fetchone()
+	        if (mode == "display"):
+	            # display the PostgreSQL database server version
+	            db_version = cur.fetchone()
+	        else:
+	            conn.commit()
 
 	        return db_version
 
@@ -133,17 +137,24 @@ class IndivScores(object):
 
 		return '2000-01-01'
 
-	#IF NOT EXISTS
 	'''Create tables if they do not exist yet'''
 	def initTables(self):
-		query = str('CREATE TABLE usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL)')
-		IndivScores.connect(query)
+		query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
+		IndivScores.connect(query, "create")
+
+		stuff = str("INSERT INTO usecase VALUES (652, 'smart', 34, 60, true, false, true, false, '1997-12-27');")
+		IndivScores.connect(stuff, "insert")
+
+		query = str('SELECT * FROM usecase WHERE persID = 654;')
+		temp = IndivScores.connect(query, "display")
+		print("jetzt kommt's")
+		print(temp)
 
 	'''Get total amount of values, while values are received every XX seconds'''
 	def getn(persID, days):
 		date = IndivScores.getdate(days)
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND targetdate >= ' + str(date))
-		result = IndivScores.connect(query)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ';')#' AND targetdate >= ' + str(date) + ';')
+		result = IndivScores.connect(query, "display")
 
 		return result
 
@@ -152,8 +163,8 @@ class IndivScores(object):
 		n = IndivScores.getn(persID, days)
 		date = IndivScores.getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND speedev = 1')# AND targetdate >= ' + str(date))
-		temp = IndivScores.connect(query)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND speedev = TRUE')# AND targetdate >= ' + str(date))
+		temp = IndivScores.connect(query, "display")
 		result = 1#(temp / n)
 
 		return result
@@ -162,8 +173,8 @@ class IndivScores(object):
 		n = IndivScores.getn(persID, days)
 		date = IndivScores.getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND turnev = 1')# AND targetdate >= ' + str(date))
-		temp = IndivScores.connect(query)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND turnev = TRUE')# AND targetdate >= ' + str(date))
+		temp = IndivScores.connect(query, "display")
 		result = 1#(temp / n)
 
 		return result
@@ -172,8 +183,8 @@ class IndivScores(object):
 		n = IndivScores.getn(persID, days)
 		date = IndivScores.getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND brakeev = 1')# AND targetdate >= ' + str(date))
-		temp = IndivScores.connect(query)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND brakeev = TRUE')# AND targetdate >= ' + str(date))
+		temp = IndivScores.connect(query, "display")
 		result = 1#(temp / n)
 
 		return result
@@ -182,8 +193,8 @@ class IndivScores(object):
 		n = IndivScores.getn(persID, days)
 		date = IndivScores.getdate(days)
 
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND crashev = 1')# AND targetdate >= ' + str(date))
-		temp = IndivScores.connect(query)
+		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(persID) + ' AND crashev = TRUE')# AND targetdate >= ' + str(date))
+		temp = IndivScores.connect(query, "display")
 		result = 1#(temp / n)
 
 		return result
@@ -192,8 +203,8 @@ class IndivScores(object):
 	def getAvgSpeed(persID, days):
 		date = IndivScores.getdate(days)
 
-		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE persID = ' + str(persID))# + ' AND targetdate >= ' + str(date))
-		result = IndivScores.connect(query)
+		query = str('SELECT AVG(speed) FROM usecase WHERE persID = ' + str(persID))# + ' AND targetdate >= ' + str(date))
+		result = IndivScores.connect(query, "display")
 
 		return result
 
@@ -203,7 +214,7 @@ class IndivScores(object):
 		date = IndivScores.getdate(days)
 
 		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE typeID = ' + str(typeID))# + ' AND targetdate >= ' + str(date))
-		result = IndivScores.connect(query)
+		result = IndivScores.connect(query, "display")
 
 		return result
 
@@ -211,6 +222,6 @@ class IndivScores(object):
 		date = IndivScores.getdate(days)
 
 		query = str('SELECT to_char(AVG(performance)) FROM usecase WHERE typeID = ' + str(typeID))# + ' AND targetdate >= ' + str(date))
-		result = IndivScores.connect(query)
+		result = IndivScores.connect(query, "display")
 
 		return result
