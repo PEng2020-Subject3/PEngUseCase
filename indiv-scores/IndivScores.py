@@ -84,7 +84,7 @@ class IndivScores(object):
 		self.avgspeed = IndivScores.getAvgSpeed(self.id, self.days)
 
 		#for testing
-	    print("TEST: " + self.speedscore)
+	    #print("TEST: " + str(self.speedscore))
 
 		return self.packJSON()
 
