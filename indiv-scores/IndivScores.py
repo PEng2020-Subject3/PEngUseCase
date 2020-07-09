@@ -225,24 +225,26 @@ class IndivScores(object):
 		date = IndivScores.getdate(days)
 
 		query = str('SELECT AVG(speed) FROM usecase WHERE persID = ' + str(persID))# + ' AND targetdate >= ' + str(date))
-		result = IndivScores.connect(query, "display")
+		temp = IndivScores.connect(query, "display")
+		result = int(temp[0])
 
 		return result
-
 
 	'''Functions below calulate positive values – Use Case 2'''
 	def getAvgTypeSpeed(typeID, days):
 		date = IndivScores.getdate(days)
 
-		query = str('SELECT to_char(AVG(speed)) FROM usecase WHERE typeID = ' + str(typeID))# + ' AND targetdate >= ' + str(date))
-		result = IndivScores.connect(query, "display")
+		query = str('SELECT AVG(speed) FROM usecase WHERE typeID = ' + str(typeID))# + ' AND targetdate >= ' + str(date))
+		temp = IndivScores.connect(query, "display")
+		result = int(temp[0])
 
 		return result
 
 	def getEnginePerf(typeID, days):
 		date = IndivScores.getdate(days)
 
-		query = str('SELECT to_char(AVG(performance)) FROM usecase WHERE typeID = ' + str(typeID))# + ' AND targetdate >= ' + str(date))
-		result = IndivScores.connect(query, "display")
+		query = str('SELECT AVG(performance) FROM usecase WHERE typeID = ' + str(typeID))# + ' AND targetdate >= ' + str(date))
+		temp = IndivScores.connect(query, "display")
+		result = int(temp[0])
 
 		return result
