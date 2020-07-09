@@ -6,5 +6,5 @@ functions:
   driver-scores:
     lang: python3
     handler: ./driver-scores
-    image: driver-scores:latest
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/driver-scores:latest
 

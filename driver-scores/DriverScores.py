@@ -1,19 +1,12 @@
 #!/usr/bin/python
-from IndivScores import IndivScores as indiv
+from urllib.request import urlopen
 import json
 
 '''Functions in this class create a json containing respective information'''
 class DriverScores(object):
-	def __init__(self, method, persID, days):
+	def __init__(self, method, persID):
 		self.method = method
 		self.persID = persID
-		self.days = days
-
-		self.speedscore = indiv.getSpeedVal(persID, days)
-		self.turnscore = indiv.getTurnVal(persID, days)
-		self.brakescore = indiv.getBrakeVal(persID, days)
-		self.crashscore = indiv.getCrashVal(persID, days)
-		self.avgspeed = indiv.getAvgSpeed(persID, days)
 
 	def main(self):
 		if (self.method == "genDriverScore"):
@@ -23,13 +16,35 @@ class DriverScores(object):
 		else:
 			print("Unknown Method!")
 
+	def getData(self):
+		req_raw = {
+			'id': self.persID,
+			'scoretype': "driverscore"
+		}
+
+		req = json.dumps(req_raw, indent=2)
+
+		binary_req = req.encode('utf-8')
+
+		url = 'http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080/function/indiv-driverscores'
+		rv = urlopen(url, data=binary_req)
+		temp = rv.read().decode('utf-8')
+		res = json.loads(temp)
+		rv.close()
+
+		self.speedscore = res["speedscore"]
+		self.turnscore = res["turnscore"]
+		self.brakescore = res["brakescore"]
+		self.crashscore = res["crashscore"]
+		self.avgspeed = res["avgspeed"]
+
 	'''Dashboard Information – Use Case 1'''
 	def genDriverScore(self):
+		self.getData()
 		score = self.getDriverScore()
 
 		uc_1raw = {
 			'id': self.persID,
-			'days': self.days,
 			'driverscore': score
 		}
 
@@ -45,8 +60,8 @@ class DriverScores(object):
 
 	'''Dashboard Information – Use Cases 1 & 3'''
 	def genDriverScoreWeek(self):
-		#time aggreation over one week (can be adjusted of course)
-		self.days = 7
+		#car type aggregation -- fleet manager can call data for his fleet id/typeID
+		self.getData()
 		driverscore = self.getDriverScore()
 
 		uc_13raw = {
@@ -54,10 +69,6 @@ class DriverScores(object):
 			'driverscore': driverscore,
 			'avgspeed': self.avgspeed
 		}
-
 		uc_13 = json.dumps(uc_13raw, indent=2)
-		return uc_13
 
-	'''Would be nice to have a crash alert, but does not make really sense as long as database not dynamically created'''
-	#def getAlert(self):
-	#	self.days = 1
+		return uc_13
