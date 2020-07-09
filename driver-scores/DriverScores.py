@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from urllib.request import urlopen
 import json
 
 '''Functions in this class create a json containing respective information'''
@@ -16,7 +17,7 @@ class DriverScores(object):
 		else:
 			print("Unknown Method!")
 
-	def getData(self, class):
+	def getData(self):
 		req_raw = {
 			'id': self.persID,
 			'days': self.days,
@@ -25,14 +26,13 @@ class DriverScores(object):
 
 		req = json.dumps(req_raw, indent=2)
 
-		'''
-		TODO:
+		binary_req = req.encode('utf-8')
 
-		connect to db, send req and get res!!
-
-		'''
-
-		json_res = json.loads(res)
+		url = 'http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080/function/indiv-scores'
+		rv = urlopen(url, data=binary_req)
+		temp = rv.read().decode('utf-8')
+		res = json.loads(temp)
+		rv.close()
 
 		self.speedscore = res["speedscore"]
 		self.turnscore = res["turnscore"]
@@ -65,6 +65,7 @@ class DriverScores(object):
 	def genDriverScoreWeek(self):
 		#time aggreation over one week (can be adjusted of course)
 		self.days = 7
+		self.getData()
 		driverscore = self.getDriverScore()
 
 		uc_13raw = {
@@ -72,6 +73,6 @@ class DriverScores(object):
 			'driverscore': driverscore,
 			'avgspeed': self.avgspeed
 		}
-
 		uc_13 = json.dumps(uc_13raw, indent=2)
+		
 		return uc_13
