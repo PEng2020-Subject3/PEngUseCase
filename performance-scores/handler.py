@@ -5,11 +5,13 @@ import json
 '''Handles PerformanceScore Function'''
 def handle(req):
     json_req = json.loads(req)
-    persID = json_req["persID"]
-    days = json_req["days"]
+    typeID = json_req["persID"]
     method = json_req["function"]
 
-    temp = PerformanceScores(method, persID, days)
+    temp = PerformanceScores(method, typeID)
     output = temp.main()
 
     return output
+
+# Example input:
+# {"typeID": 666, "function": "genPerformanceScore"}

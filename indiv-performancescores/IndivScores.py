@@ -15,7 +15,6 @@ class IndivScores(object):
 
 		if (self.scoretype == "performancescore"):
 			return self.getPerfscoreData()
-
 		else:
 			print("Undefined Data Requested.")
 			exit()
@@ -110,11 +109,9 @@ class IndivScores(object):
 
 		return result
 
-		return result
-
 	'''Functions below calculate values between 0 and 1 – Use Cases 1 & 3'''
 	def getSpeedVal():
-		n = self.getn(persID, days)
+		n = self.getn()
 
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND speedev = TRUE;")
 		temp = IndivScores.connect(query, "display")
@@ -128,7 +125,7 @@ class IndivScores(object):
 		return result
 
 	def getTurnVal(self):
-		n = self.getn(persID, days)
+		n = self.getn()
 
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND turnev = TRUE;")
 		temp = IndivScores.connect(query, "display")
@@ -142,7 +139,7 @@ class IndivScores(object):
 		return result
 
 	def getBrakeVal(self):
-		n = self.getn(persID, days)
+		n = self.getn()
 
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND brakeev = TRUE;")
 		temp = IndivScores.connect(query, "display")
@@ -156,7 +153,7 @@ class IndivScores(object):
 		return result
 
 	def getCrashVal(self):
-		n = self.getn(persID, days)
+		n = self.getn()
 
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND crashev = TRUE;")
 		temp = IndivScores.connect(query, "display")

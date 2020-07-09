@@ -4,10 +4,9 @@ import json
 
 '''Functions in this class create a json containing respective information'''
 class PerformanceScores(object):
-	def __init__(self, method, typeID, days):
+	def __init__(self, method, typeID):
 		self.method = method
 		self.typeID = typeID
-		self.days = days
 
 	def main(self):
 		if (self.method == "genPerformanceScore"):
@@ -18,7 +17,6 @@ class PerformanceScores(object):
 	def getData(self):
 		req_raw = {
 			'id': self.typeID,
-			'days': self.days,
 			'scoretype': 'performancescore'
 		}
 
@@ -46,7 +44,6 @@ class PerformanceScores(object):
 		uc_2raw = {
 			'general': {
 				'typeID': self.typeID,
-				'days': self.days,
 				'logs': self.logs
 			},
 			'scores': {
