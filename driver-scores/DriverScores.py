@@ -4,10 +4,9 @@ import json
 
 '''Functions in this class create a json containing respective information'''
 class DriverScores(object):
-	def __init__(self, method, persID, days):
+	def __init__(self, method, persID):
 		self.method = method
 		self.persID = persID
-		self.days = days
 
 	def main(self):
 		if (self.method == "genDriverScore"):
@@ -20,7 +19,6 @@ class DriverScores(object):
 	def getData(self):
 		req_raw = {
 			'id': self.persID,
-			'days': self.days,
 			'scoretype': "driverscore"
 		}
 
@@ -28,7 +26,7 @@ class DriverScores(object):
 
 		binary_req = req.encode('utf-8')
 
-		url = 'http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080/function/indiv-scores'
+		url = 'http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080/function/indiv-driverscores'
 		rv = urlopen(url, data=binary_req)
 		temp = rv.read().decode('utf-8')
 		res = json.loads(temp)
@@ -47,7 +45,6 @@ class DriverScores(object):
 
 		uc_1raw = {
 			'id': self.persID,
-			'days': self.days,
 			'driverscore': score
 		}
 
@@ -63,8 +60,7 @@ class DriverScores(object):
 
 	'''Dashboard Information – Use Cases 1 & 3'''
 	def genDriverScoreWeek(self):
-		#time aggreation over one week (can be adjusted of course)
-		self.days = 7
+		#car type aggregation -- fleet manager can call data for his fleet id/typeID
 		self.getData()
 		driverscore = self.getDriverScore()
 
@@ -74,5 +70,5 @@ class DriverScores(object):
 			'avgspeed': self.avgspeed
 		}
 		uc_13 = json.dumps(uc_13raw, indent=2)
-		
+
 		return uc_13

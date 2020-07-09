@@ -3,7 +3,7 @@ provider:
   name: openfaas
   gateway: http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080
 functions:
-  indiv-scores:
+  indiv-driverscores:
     lang: python3-debian
-    handler: ./indiv-scores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-scores:latest
+    handler: ./indiv-driverscores
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-driverscores:latest

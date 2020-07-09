@@ -1,4 +1,5 @@
 #!/usr/bin/python
+from urllib.request import urlopen
 import json
 
 '''Functions in this class create a json containing respective information'''
@@ -14,23 +15,22 @@ class PerformanceScores(object):
 		else:
 			print("Unknown Method!")
 
-	def getData(self, class):
+	def getData(self):
 		req_raw = {
 			'id': self.typeID,
 			'days': self.days,
-			'scoretype': "performancescore"
+			'scoretype': 'performancescore'
 		}
 
 		req = json.dumps(req_raw, indent=2)
 
-		'''
-		TODO:
+		binary_req = req.encode('utf-8')
 
-		connect to IndivScores, send req and get res!!
-
-		'''
-
-		json_res = json.loads(res)
+		url = 'http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080/function/indiv-performancescores'
+		rv = urlopen(url, data=binary_req)
+		temp = rv.read().decode('utf-8')
+		res = json.loads(temp)
+		rv.close()
 
 		self.logs = res["logs"]
 		self.speedscore = res["speedscore"]

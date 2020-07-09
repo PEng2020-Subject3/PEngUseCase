@@ -6,10 +6,12 @@ import json
 def handle(req):
     json_req = json.loads(req)
     id = json_req["id"]
-    days = json_req["days"]
     scoretype = json_req["scoretype"]
 
-    temp = IndivScores(id, days, scoretype)
+    temp = IndivScores(id, scoretype)
     output = temp.main()
 
     return output
+ 
+# Example Input:
+# {"id": 666,"scoretype": "driverscore"}
