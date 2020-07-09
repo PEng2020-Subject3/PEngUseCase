@@ -107,17 +107,17 @@ class IndivScores(object):
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "';")
 		result = IndivScores.connect(query, "display")
 
-		return result
+		return result[0]
 
 	'''Functions below calculate values between 0 and 1 – Use Cases 1 & 3'''
-	def getSpeedVal():
+	def getSpeedVal(self):
 		n = self.getn()
 
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND speedev = TRUE;")
 		temp = IndivScores.connect(query, "display")
 
-		if (n[0] != 0):
-			result = (temp[0] / n[0])
+		if (n != 0):
+			result = (temp[0] / n)
 		else:
 			print("No Matching DB Entries!")
 			exit()
@@ -130,8 +130,8 @@ class IndivScores(object):
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND turnev = TRUE;")
 		temp = IndivScores.connect(query, "display")
 
-		if (n[0] != 0):
-			result = (temp[0] / n[0])
+		if (n != 0):
+			result = (temp[0] / n)
 		else:
 			print("No Matching DB Entries!")
 			exit()
@@ -144,8 +144,8 @@ class IndivScores(object):
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND brakeev = TRUE;")
 		temp = IndivScores.connect(query, "display")
 
-		if (n[0] != 0):
-			result = (temp[0] / n[0])
+		if (n != 0):
+			result = (temp[0] / n)
 		else:
 			print("No Matching DB Entries!")
 			exit()
@@ -158,8 +158,8 @@ class IndivScores(object):
 		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND crashev = TRUE;")
 		temp = IndivScores.connect(query, "display")
 
-		if (n[0] != 0):
-			result = (temp[0] / n[0])
+		if (n != 0):
+			result = (temp[0] / n)
 		else:
 			print("No Matching DB Entries!")
 			exit()
@@ -168,15 +168,15 @@ class IndivScores(object):
 
 	def getAvgSpeed(self):
 
-		query = str('SELECT AVG(speed) FROM usecase WHERE typeID = ' + str(self.id))
+		query = str("SELECT AVG(speed) FROM usecase WHERE typeID = '" + str(self.id) + "';")
 		temp = IndivScores.connect(query, "display")
 		result = int(temp[0])
 
 		return result
 
 		'''Function below calulate positive values – Use Case 3'''
-	def getEnginePerf(typeID, days):
-		query = str('SELECT AVG(performance) FROM usecase WHERE typeID = ' + str(self.id))
+	def getEnginePerf(self):
+		query = str("SELECT AVG(performance) FROM usecase WHERE typeID = '" + str(self.id) + "';")
 		temp = IndivScores.connect(query, "display")
 		result = int(temp[0])
 

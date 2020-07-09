@@ -14,4 +14,4 @@ def handle(req):
     return output
 
 # Example Input:
-# {"id": "prius","scoretype": "performancescores"}
+# {"id": "prius","scoretype": "performancescore"}
