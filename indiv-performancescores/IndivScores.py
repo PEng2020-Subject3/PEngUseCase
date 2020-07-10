@@ -3,6 +3,7 @@ from __future__ import division
 from configparser import ConfigParser
 import psycopg2
 import json
+import os
 
 '''This class calculates individual scores based on information received from a database that can be further processed.'''
 class IndivScores(object):
@@ -25,13 +26,17 @@ class IndivScores(object):
 	    parser = ConfigParser()
 	    # read config file
 	    parser.read(filename)
+	    db_host = str(os.environ['db_host'])
+	    db_name = str(os.environ['db_name'])
+	    db_user = str(os.environ['db_user'])
+	    db_password = str(os.environ['db_password'])
 
 	    # get section, default to postgresql
 	    db = {
-			"host": "usecase-postgres-db-postgresql",
-			"database": "postgres",
-			"user": "postgres",
-			"password": "3BDAJjFHOA"
+			"host": db_host,
+			"database": db_name,
+			"user": db_user,
+			"password": db_password
 		}
 
 	    return db

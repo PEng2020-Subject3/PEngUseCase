@@ -12,6 +12,6 @@ def handle(req):
     output = temp.main()
 
     return output
- 
+
 # Example Input:
 # {"id": 666,"scoretype": "driverscore"}
