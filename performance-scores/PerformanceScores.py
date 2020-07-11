@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from urllib.request import urlopen
 import json
+import os
 
 '''Functions in this class create a json containing respective information'''
 class PerformanceScores(object):
@@ -24,7 +25,7 @@ class PerformanceScores(object):
 
 		binary_req = req.encode('utf-8')
 
-		url = 'http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080/function/indiv-performancescores'
+		url = str(os.environ['indivfunction_url'])
 		rv = urlopen(url, data=binary_req)
 		temp = rv.read().decode('utf-8')
 		res = json.loads(temp)
