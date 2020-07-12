@@ -29,7 +29,6 @@ class DriverScores(object):
 
 		try:
 			policy = str(os.environ['openfaas.policy.name'])
-			print(policy)
 			url = str("http://gateway.openfaas:8080/function/indiv-driverscores?policy=" + str(policy))
 		except:
 			url = str("http://gateway.openfaas:8080/function/indiv-driverscores")

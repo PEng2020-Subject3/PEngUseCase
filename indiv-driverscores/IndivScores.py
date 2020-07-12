@@ -20,60 +20,60 @@ class IndivScores(object):
 			print("Undefined Data Requested.")
 			exit()
 
-	#based on https://www.postgresqltutorial.com/postgresql-python/connect/
-	def config(filename='database.ini', section='postgresql'):
-	    # create a parser
-	    parser = ConfigParser()
-	    # read config file
-	    parser.read(filename)
-	    db_host = str(os.environ['db_host'])
-	    db_name = str(os.environ['db_name'])
-	    db_user = str(os.environ['db_user'])
-	    db_password = str(os.environ['db_password'])
-
-	    # get section, default to postgresql
-	    db = {
-			"host": db_host,
-			"database": db_name,
-			"user": db_user,
-			"password": db_password
-		}
-
-	    return db
-
-	#based on https://www.postgresqltutorial.com/postgresql-python/connect/
-	def connect(query, mode):
-	    '''Connect to the PostgreSQL database server'''
-	    conn = None
-	    try:
-	        # read connection parameters
-	        params = IndivScores.config()
-
-	        # connect to the PostgreSQL server
-	        conn = psycopg2.connect(**params)
-
-	        # create a cursor
-	        cur = conn.cursor()
-
-			# execute a statement
-	        cur.execute(query)
-	        db_version = None
-
-	        if (mode == "display"):
-	            # display the PostgreSQL database server version
-	            db_version = cur.fetchone()
-	        else:
-	            conn.commit()
-
-	        return db_version
-
-		    # close the communication with the PostgreSQL
-	        cur.close()
-	    except (Exception, psycopg2.DatabaseError) as error:
-	        print(error)
-	    finally:
-	        if conn is not None:
-	            conn.close()
+	# #based on https://www.postgresqltutorial.com/postgresql-python/connect/
+	# def config(filename='database.ini', section='postgresql'):
+	#     # create a parser
+	#     parser = ConfigParser()
+	#     # read config file
+	#     parser.read(filename)
+	#     db_host = str(os.environ['db_host'])
+	#     db_name = str(os.environ['db_name'])
+	#     db_user = str(os.environ['db_user'])
+	#     db_password = str(os.environ['db_password'])
+	#
+	#     # get section, default to postgresql
+	#     db = {
+	# 		"host": db_host,
+	# 		"database": db_name,
+	# 		"user": db_user,
+	# 		"password": db_password
+	# 	}
+	#
+	#     return db
+	#
+	# #based on https://www.postgresqltutorial.com/postgresql-python/connect/
+	# def connect(query, mode):
+	#     '''Connect to the PostgreSQL database server'''
+	#     conn = None
+	#     try:
+	#         # read connection parameters
+	#         params = IndivScores.config()
+	#
+	#         # connect to the PostgreSQL server
+	#         conn = psycopg2.connect(**params)
+	#
+	#         # create a cursor
+	#         cur = conn.cursor()
+	#
+	# 		# execute a statement
+	#         cur.execute(query)
+	#         db_version = None
+	#
+	#         if (mode == "display"):
+	#             # display the PostgreSQL database server version
+	#             db_version = cur.fetchone()
+	#         else:
+	#             conn.commit()
+	#
+	#         return db_version
+	#
+	# 	    # close the communication with the PostgreSQL
+	#         cur.close()
+	#     except (Exception, psycopg2.DatabaseError) as error:
+	#         print(error)
+	#     finally:
+	#         if conn is not None:
+	#             conn.close()
 
 	'''Packs JSON with use case-specific data '''
 	def getDriverscoreData(self):
@@ -98,10 +98,10 @@ class IndivScores(object):
 
 		return res
 
-	'''Create tables if they do not exist yet'''
-	def initTables(self):
-		query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
-		IndivScores.connect(query, "create")
+	# '''Create tables if they do not exist yet'''
+	# def initTables(self):
+	# 	query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
+	# 	IndivScores.connect(query, "create")
 	#
 	# '''Get total amount of values, while values are received every XX seconds'''
 	# def getn(self):
