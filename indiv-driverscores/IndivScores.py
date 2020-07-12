@@ -12,7 +12,7 @@ class IndivScores(object):
 		self.scoretype = scoretype
 
 	def main(self):
-		self.initTables()
+		# self.initTables()
 
 		if (self.scoretype == "driverscore"):
 			return self.getDriverscoreData()
@@ -77,11 +77,11 @@ class IndivScores(object):
 
 	'''Packs JSON with use case-specific data '''
 	def getDriverscoreData(self):
-		self.speedscore = self.getSpeedVal()
-		self.turnscore = self.getTurnVal()
-		self.brakescore = self.getBrakeVal()
-		self.crashscore = self.getCrashVal()
-		self.avgspeed = self.getAvgSpeed()
+		self.speedscore = 0.5#self.getSpeedVal()
+		self.turnscore = 0.5#self.getTurnVal()
+		self.brakescore = 0.5#self.getBrakeVal()
+		self.crashscore = 0.5#self.getCrashVal()
+		self.avgspeed = 0.5#self.getAvgSpeed()
 
 		return self.packJSON()
 
@@ -102,74 +102,74 @@ class IndivScores(object):
 	def initTables(self):
 		query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
 		IndivScores.connect(query, "create")
-
-	'''Get total amount of values, while values are received every XX seconds'''
-	def getn(self):
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ';')
-		result = IndivScores.connect(query, "display")
-
-		return result
-
-	'''Functions below calculate values between 0 and 1 – Use Cases 1 & 3'''
-	def getSpeedVal(self):
-		n = self.getn()
-
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ' AND speedev = TRUE')
-		temp = IndivScores.connect(query, "display")
-
-		if (n[0] != 0):
-			result = (temp[0] / n[0])
-		else:
-			print("No Matching DB Entries!")
-			exit()
-
-		return result
-
-	def getTurnVal(self):
-		n = self.getn()
-
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ' AND turnev = TRUE')
-		temp = IndivScores.connect(query, "display")
-
-		if (n[0] != 0):
-			result = (temp[0] / n[0])
-		else:
-			print("No Matching DB Entries!")
-			exit()
-
-		return result
-
-	def getBrakeVal(self):
-		n = self.getn()
-
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ' AND brakeev = TRUE')
-		temp = IndivScores.connect(query, "display")
-
-		if (n[0] != 0):
-			result = (temp[0] / n[0])
-		else:
-			print("No Matching DB Entries!")
-			exit()
-
-		return result
-
-	def getCrashVal(self):
-		n = self.getn()
-
-		query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ' AND crashev = TRUE')
-		temp = IndivScores.connect(query, "display")
-
-		if (n[0] != 0):
-			result = (temp[0] / n[0])
-		else:
-			print("No Matching DB Entries!")
-			exit()
-
-		return result
-
-	def getAvgSpeed(self):
-		query = str('SELECT AVG(speed) FROM usecase WHERE persID = ' + str(self.id))
-		temp = IndivScores.connect(query, "display")
-		result = int(temp[0])
-
-		return result
+	#
+	# '''Get total amount of values, while values are received every XX seconds'''
+	# def getn(self):
+	# 	query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ';')
+	# 	result = IndivScores.connect(query, "display")
+	#
+	# 	return result
+	#
+	# '''Functions below calculate values between 0 and 1 – Use Cases 1 & 3'''
+	# def getSpeedVal(self):
+	# 	n = self.getn()
+	#
+	# 	query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ' AND speedev = TRUE')
+	# 	temp = IndivScores.connect(query, "display")
+	#
+	# 	if (n[0] != 0):
+	# 		result = (temp[0] / n[0])
+	# 	else:
+	# 		print("No Matching DB Entries!")
+	# 		exit()
+	#
+	# 	return result
+	#
+	# def getTurnVal(self):
+	# 	n = self.getn()
+	#
+	# 	query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ' AND turnev = TRUE')
+	# 	temp = IndivScores.connect(query, "display")
+	#
+	# 	if (n[0] != 0):
+	# 		result = (temp[0] / n[0])
+	# 	else:
+	# 		print("No Matching DB Entries!")
+	# 		exit()
+	#
+	# 	return result
+	#
+	# def getBrakeVal(self):
+	# 	n = self.getn()
+	#
+	# 	query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ' AND brakeev = TRUE')
+	# 	temp = IndivScores.connect(query, "display")
+	#
+	# 	if (n[0] != 0):
+	# 		result = (temp[0] / n[0])
+	# 	else:
+	# 		print("No Matching DB Entries!")
+	# 		exit()
+	#
+	# 	return result
+	#
+	# def getCrashVal(self):
+	# 	n = self.getn()
+	#
+	# 	query = str('SELECT COUNT(*) FROM usecase WHERE persID = ' + str(self.id) + ' AND crashev = TRUE')
+	# 	temp = IndivScores.connect(query, "display")
+	#
+	# 	if (n[0] != 0):
+	# 		result = (temp[0] / n[0])
+	# 	else:
+	# 		print("No Matching DB Entries!")
+	# 		exit()
+	#
+	# 	return result
+	#
+	# def getAvgSpeed(self):
+	# 	query = str('SELECT AVG(speed) FROM usecase WHERE persID = ' + str(self.id))
+	# 	temp = IndivScores.connect(query, "display")
+	# 	result = int(temp[0])
+	#
+	# 	return result
