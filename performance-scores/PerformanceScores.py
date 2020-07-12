@@ -25,7 +25,12 @@ class PerformanceScores(object):
 
 		binary_req = req.encode('utf-8')
 
-		url = str(os.environ['indivfunction_url'])
+		try:
+			policy = str(os.environ['faas.policy.name'])
+			url = str("http://gateway.openfaas:8080/function/indiv-performancescores?policy=" + str(policy))
+		except:
+			url = str("http://gateway.openfaas:8080/function/indiv-performancescores")
+
 		rv = urlopen(url, data=binary_req)
 		temp = rv.read().decode('utf-8')
 		res = json.loads(temp)
