@@ -12,8 +12,8 @@ class DriverScores(object):
 	def main(self):
 		if (self.method == "genDriverScore"):
 			return self.genDriverScore()
-		elif (self.method == "genDriverScoreWeek"):
-			return self.genDriverScoreWeek()
+		elif (self.method == "genDriverScoreFleet"):
+			return self.genDriverScoreFleet()
 		else:
 			print("Unknown Method!")
 
@@ -60,7 +60,7 @@ class DriverScores(object):
 		return driverscore
 
 	'''Dashboard Information – Use Cases 1 & 3'''
-	def genDriverScoreWeek(self):
+	def genDriverScoreFleet(self):
 		#car type aggregation -- fleet manager can call data for his fleet id/typeID
 		self.getData()
 		driverscore = self.getDriverScore()
