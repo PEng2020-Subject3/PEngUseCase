@@ -7,5 +7,3 @@ functions:
     lang: python3
     handler: ./performance-scores
     image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:latest
-    environment:
-      indivfunction_url: http://a9183c8fba36f4a1ba3c4e3e02e0c5b5-1119442738.us-east-1.elb.amazonaws.com:8080/function/indiv-performancescores

@@ -26,7 +26,7 @@ class PerformanceScores(object):
 		binary_req = req.encode('utf-8')
 
 		try:
-			policy = str(os.environ['faas.policy.name'])
+			policy = str(os.environ['openfaas.policy.name'])
 			url = str("http://gateway.openfaas:8080/function/indiv-performancescores?policy=" + str(policy))
 		except:
 			url = str("http://gateway.openfaas:8080/function/indiv-performancescores")

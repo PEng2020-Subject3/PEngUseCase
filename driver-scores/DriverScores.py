@@ -28,7 +28,7 @@ class DriverScores(object):
 		binary_req = req.encode('utf-8')
 
 		try:
-			policy = str(os.environ['faas.policy.name'])
+			policy = str(os.environ['openfaas.policy.name'])
 			print(policy)
 			url = str("http://gateway.openfaas:8080/function/indiv-driverscores?policy=" + str(policy))
 		except:
