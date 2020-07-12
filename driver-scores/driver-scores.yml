@@ -7,3 +7,8 @@ functions:
     lang: python3
     handler: ./driver-scores
     image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/driver-scores:latest
+    environment:
+      db_host: usecase-postgres-db-postgresql
+      db_name: postgres
+      db_user: postgres
+      db_password: 3BDAJjFHOA

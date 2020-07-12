@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from .DriverScores import DriverScores
+from .IndivScores import IndivScores
 import json
 
 '''Handles DriverScore Function'''
@@ -11,7 +12,14 @@ def handle(req):
     temp = DriverScores(method, persID)
     output = temp.main()
 
+    json_req = json.loads(output)
+    id = json_req["id"]
+    scoretype = json_req["scoretype"]
+
+    temp = IndivScores(id, scoretype)
+    output = temp.main()
+
     return output
 
-# Example Input: 
+# Example Input:
 # {"persID": 666, "function": "genDriverScore"}
