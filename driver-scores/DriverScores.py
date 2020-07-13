@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from urllib.request import urlopen
+from .IndivScores import IndivScores
 import json
 import os
 
@@ -25,24 +26,25 @@ class DriverScores(object):
 
 		req = json.dumps(req_raw, indent=2)
 
-		binary_req = req.encode('utf-8')
+		res = DriverScores.handle(req)
+		json_res = json.loads(res)
 
-		try:
-			policy = str(os.environ['openfaas.policy.name'])
-			url = str("http://gateway.openfaas:8080/function/indiv-driverscores?policy=" + str(policy))
-		except:
-			url = str("http://gateway.openfaas:8080/function/indiv-driverscores")
+		self.speedscore = json_res["speedscore"]
+		self.turnscore = json_res["turnscore"]
+		self.brakescore = json_res["brakescore"]
+		self.crashscore = json_res["crashscore"]
+		self.avgspeed = json_res["avgspeed"]
 
-		rv = urlopen(url, data=binary_req)
-		temp = rv.read().decode('utf-8')
-		res = json.loads(temp)
-		rv.close()
+	def handle(req):
+	    json_req = json.loads(req)
+	    id = json_req["id"]
+	    scoretype = json_req["scoretype"]
 
-		self.speedscore = res["speedscore"]
-		self.turnscore = res["turnscore"]
-		self.brakescore = res["brakescore"]
-		self.crashscore = res["crashscore"]
-		self.avgspeed = res["avgspeed"]
+	    temp = IndivScores(id, scoretype)
+	    output = temp.main()
+
+	    return output
+
 
 	'''Dashboard Information – Use Case 1'''
 	def genDriverScore(self):

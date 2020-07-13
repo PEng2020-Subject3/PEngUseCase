@@ -4,7 +4,7 @@ provider:
   gateway: http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080
 functions:
   driver-scores:
-    lang: python3
+    lang: python3-debian
     handler: ./driver-scores
     image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/driver-scores:latest
     environment:
