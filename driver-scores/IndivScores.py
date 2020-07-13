@@ -12,7 +12,7 @@ class IndivScores(object):
 		self.scoretype = scoretype
 
 	def main(self):
-		self.initTables()
+		# self.initTables()
 
 		if (self.scoretype == "driverscore"):
 			return self.getDriverscoreData()
