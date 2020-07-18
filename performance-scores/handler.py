@@ -10,7 +10,7 @@ def handle(req):
         typeID = json_req["typeID"]
         method = json_req["function"]
     except:
-        raise Exception(400, "BadRequest", "Example input:", '{"typeID": "prius", "function": "genPerformanceScore"}')
+        return Exception(400, "BadRequest", "Example input:", '{"typeID": "prius", "function": "genPerformanceScore"}')
 
     temp = PerformanceScores(method, typeID)
     output = temp.main()
