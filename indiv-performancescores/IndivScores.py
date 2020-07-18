@@ -1,188 +1,192 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 from __future__ import division
 from configparser import ConfigParser
 import psycopg2
 import json
 import os
+import sys
 
-'''This class calculates individual scores based on information received from a database that can be further processed.'''
+
 class IndivScores(object):
-	def __init__(self, id, scoretype):
-		self.id = id
-		self.scoretype = scoretype
+    """
+    This class calculates individual scores based on information received from a database that can be further
+    processed.
+    """
 
-	def main(self):
-		self.initTables()
+    def __init__(self, id, scoretype):
+        self.id = id
+        self.scoretype = scoretype
 
-		if (self.scoretype == "performancescore"):
-			return self.getPerfscoreData()
-		else:
-			print("Undefined Data Requested.")
-			exit()
+    def main(self):
+        self.initTables()
 
-	#based on https://www.postgresqltutorial.com/postgresql-python/connect/
-	def config(filename='database.ini', section='postgresql'):
-	    # create a parser
-	    parser = ConfigParser()
-	    # read config file
-	    parser.read(filename)
-	    db_host = str(os.environ['db_host'])
-	    db_name = str(os.environ['db_name'])
-	    db_user = str(os.environ['db_user'])
-	    db_password = str(os.environ['db_password'])
+        if (self.scoretype == "performancescore"):
+            return self.getPerfscoreData()
+        else:
+            print("Undefined Data Requested.", file=sys.stderr)
+            exit()
 
-	    # get section, default to postgresql
-	    db = {
-			"host": db_host,
-			"database": db_name,
-			"user": db_user,
-			"password": db_password
-		}
+    # based on https://www.postgresqltutorial.com/postgresql-python/connect/
+    def config(filename='database.ini', section='postgresql'):
+        # create a parser
+        parser = ConfigParser()
+        # read config file
+        parser.read(filename)
+        db_host = str(os.environ['db_host'])
+        db_name = str(os.environ['db_name'])
+        db_user = str(os.environ['db_user'])
+        db_password = str(os.environ['db_password'])
 
-	    return db
+        # get section, default to postgresql
+        db = {
+            "host": db_host,
+            "database": db_name,
+            "user": db_user,
+            "password": db_password
+        }
 
-	#based on https://www.postgresqltutorial.com/postgresql-python/connect/
-	def connect(query, mode):
-	    '''Connect to the PostgreSQL database server'''
-	    conn = None
-	    try:
-	        # read connection parameters
-	        params = IndivScores.config()
+        return db
 
-	        # connect to the PostgreSQL server
-	        conn = psycopg2.connect(**params)
+    # based on https://www.postgresqltutorial.com/postgresql-python/connect/
+    def connect(query, mode):
+        """Connect to the PostgreSQL database server"""
+        conn = None
+        try:
+            # read connection parameters
+            params = IndivScores.config()
 
-	        # create a cursor
-	        cur = conn.cursor()
+            # connect to the PostgreSQL server
+            conn = psycopg2.connect(**params)
 
-			# execute a statement
-	        cur.execute(query)
-	        db_version = None
+            # create a cursor
+            cur = conn.cursor()
 
-	        if (mode == "display"):
-	            # display the PostgreSQL database server version
-	            db_version = cur.fetchone()
-	        else:
-	            conn.commit()
+            # execute a statement
+            cur.execute(query)
+            db_version = None
 
-	        return db_version
+            if mode == "display":
+                # display the PostgreSQL database server version
+                db_version = cur.fetchone()
+            else:
+                conn.commit()
 
-		    # close the communication with the PostgreSQL
-	        cur.close()
-	    except (Exception, psycopg2.DatabaseError) as error:
-	        print(error)
-	    finally:
-	        if conn is not None:
-	            conn.close()
+            return db_version
 
-	'''Packs JSON with use case-specific data '''
-	def getPerfscoreData(self):
-		self.logs = self.getn()
-		self.speedscore = self.getSpeedVal()
-		self.turnscore = self.getTurnVal()
-		self.brakescore = self.getBrakeVal()
-		self.crashscore = self.getCrashVal()
-		self.avgspeed = self.getAvgSpeed()
-		self.engperf = self.getEnginePerf()
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error, file=sys.stderr)
+        finally:
+            if conn is not None:
+                conn.close()
 
-		return self.packJSON()
+    def getPerfscoreData(self):
+        """Packs JSON with use case-specific data """
+        self.logs = self.getn()
+        self.speedscore = self.getSpeedVal()
+        self.turnscore = self.getTurnVal()
+        self.brakescore = self.getBrakeVal()
+        self.crashscore = self.getCrashVal()
+        self.avgspeed = self.getAvgSpeed()
+        self.engperf = self.getEnginePerf()
 
-	def packJSON(self):
-		res_raw = {
-			'logs': self.logs,
-			'speedscore': self.speedscore,
-			'turnscore': self.turnscore,
-			'brakescore': self.brakescore,
-			'crashscore': self.crashscore,
-			'avgspeed': self.avgspeed,
-			'engperf': self.engperf
-		}
+        return self.packJSON()
 
-		res = json.dumps(res_raw, indent=2)
+    def packJSON(self):
+        res_raw = {
+            'logs': self.logs,
+            'speedscore': self.speedscore,
+            'turnscore': self.turnscore,
+            'brakescore': self.brakescore,
+            'crashscore': self.crashscore,
+            'avgspeed': self.avgspeed,
+            'engperf': self.engperf
+        }
 
-		return res
+        res = json.dumps(res_raw, indent=2)
+        print(res, file=sys.stderr)
+        return res
 
-	'''Create tables if they do not exist yet'''
-	def initTables(self):
-		query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
-		IndivScores.connect(query, "create")
+    def initTables(self):
+        """Create tables if they do not exist yet"""
+        query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
+        IndivScores.connect(query, "create")
 
-	'''Get total amount of values, while values are received every XX seconds'''
-	def getn(self):
-		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "';")
-		result = IndivScores.connect(query, "display")
+    def getn(self):
+        """Get total amount of values, while values are received every XX seconds"""
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "';")
+        result = IndivScores.connect(query, "display")
 
-		return result[0]
+        return result[0]
 
-	'''Functions below calculate values between 0 and 1 – Use Cases 1 & 3'''
-	def getSpeedVal(self):
-		n = self.getn()
+    def getSpeedVal(self):
+        """Functions below calculate values between 0 and 1 – Use Cases 1 & 3"""
+        n = self.getn()
 
-		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND speedev = TRUE;")
-		temp = IndivScores.connect(query, "display")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND speedev = TRUE;")
+        temp = IndivScores.connect(query, "display")
 
-		if (n != 0):
-			result = (temp[0] / n)
-		else:
-			print("No Matching DB Entries!")
-			exit()
+        if (n != 0):
+            result = (temp[0] / n)
+        else:
+            print("No Matching DB Entries!", file=sys.stderr)
+            exit()
 
-		return result
+        return result
 
-	def getTurnVal(self):
-		n = self.getn()
+    def getTurnVal(self):
+        n = self.getn()
 
-		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND turnev = TRUE;")
-		temp = IndivScores.connect(query, "display")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND turnev = TRUE;")
+        temp = IndivScores.connect(query, "display", file=sys.stderr)
 
-		if (n != 0):
-			result = (temp[0] / n)
-		else:
-			print("No Matching DB Entries!")
-			exit()
+        if (n != 0):
+            result = (temp[0] / n)
+        else:
+            print("No Matching DB Entries!", file=sys.stderr)
+            exit()
 
-		return result
+        return result
 
-	def getBrakeVal(self):
-		n = self.getn()
+    def getBrakeVal(self):
+        n = self.getn()
 
-		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND brakeev = TRUE;")
-		temp = IndivScores.connect(query, "display")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND brakeev = TRUE;")
+        temp = IndivScores.connect(query, "display")
 
-		if (n != 0):
-			result = (temp[0] / n)
-		else:
-			print("No Matching DB Entries!")
-			exit()
+        if (n != 0):
+            result = (temp[0] / n)
+        else:
+            print("No Matching DB Entries!", file=sys.stderr)
+            exit()
 
-		return result
+        return result
 
-	def getCrashVal(self):
-		n = self.getn()
+    def getCrashVal(self):
+        n = self.getn()
 
-		query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND crashev = TRUE;")
-		temp = IndivScores.connect(query, "display")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND crashev = TRUE;")
+        temp = IndivScores.connect(query, "display")
 
-		if (n != 0):
-			result = (temp[0] / n)
-		else:
-			print("No Matching DB Entries!")
-			exit()
+        if (n != 0):
+            result = (temp[0] / n)
+        else:
+            print("No Matching DB Entries!", file=sys.stderr)
+            exit()
 
-		return result
+        return result
 
-	def getAvgSpeed(self):
+    def getAvgSpeed(self):
 
-		query = str("SELECT AVG(speed) FROM usecase WHERE typeID = '" + str(self.id) + "';")
-		temp = IndivScores.connect(query, "display")
-		result = int(temp[0])
+        query = str("SELECT AVG(speed) FROM usecase WHERE typeID = '" + str(self.id) + "';")
+        temp = IndivScores.connect(query, "display")
+        result = int(temp[0])
 
-		return result
+        return result
 
-		'''Function below calulate positive values – Use Case 3'''
-	def getEnginePerf(self):
-		query = str("SELECT AVG(performance) FROM usecase WHERE typeID = '" + str(self.id) + "';")
-		temp = IndivScores.connect(query, "display")
-		result = int(temp[0])
+    def getEnginePerf(self):
+        """Function below calculate positive values – Use Case 3"""
+        query = str("SELECT AVG(performance) FROM usecase WHERE typeID = '" + str(self.id) + "';")
+        temp = IndivScores.connect(query, "display")
+        result = int(temp[0])
 
-		return result
+        return result
