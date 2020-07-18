@@ -21,7 +21,7 @@ All four modules can be directly build, pushed and deployed as OpenFaaS function
 1. Install the [faas-cli](https://docs.openfaas.com/cli/install/) 
 1. Optionally install the [faas-policy-provider](https://github.com/PEng2020-Subject3/faas-policy-provider)
 1. Configure the function .yml including database details
-1. Build, push and deploy your function: `$ faas-cli up -g [YOUR URL HERE] -f [PATH TO YOUR FUNCTION YML]`
+1. Build, push and deploy your function: `$ faas-cli up -g [YOUR GATEWAY URL HERE] -f [PATH TO YOUR FUNCTION YML]`
 
 Now you can access the functions via the UI or URL using the following example inputs that can be found in the respective `handler.py` as well:
 
