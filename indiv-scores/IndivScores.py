@@ -48,12 +48,12 @@ class IndivScores(object):
         return db
 
     # based on https://www.postgresqltutorial.com/postgresql-python/connect/
-    def connect(query, mode):
+    def connect(self, query, mode):
         """Connect to the PostgreSQL database server"""
         conn = None
         try:
             # read connection parameters
-            params = IndivScores.config()
+            params = self.config()
 
             # connect to the PostgreSQL server
             conn = psycopg2.connect(**params)
@@ -109,14 +109,14 @@ class IndivScores(object):
     def initTables(self):
         """Create tables if they do not exist yet"""
         query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
-        IndivScores.connect(query, "create")
+        self.connect(query, "create")
         query = "INSERT INTO usecase (persID, typeID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES (666, 'prius', 33, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
-        IndivScores.connect(query, "display")
+        self.connect(query, "display")
 
     def getn(self):
         """Get total amount of values, while values are received every XX seconds"""
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "';")
-        result = IndivScores.connect(query, "display")
+        result = self.connect(query, "display")
 
         return result[0]
 
@@ -125,7 +125,7 @@ class IndivScores(object):
         n = self.getn()
 
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND speedev = TRUE;")
-        temp = IndivScores.connect(query, "display")
+        temp = self.connect(query, "display")
 
         if (n != 0):
             result = (temp[0] / n)
@@ -139,7 +139,7 @@ class IndivScores(object):
         n = self.getn()
 
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND turnev = TRUE;")
-        temp = IndivScores.connect(query, "display", file=sys.stderr)
+        temp = self.connect(query, "display", file=sys.stderr)
 
         if (n != 0):
             result = (temp[0] / n)
@@ -153,7 +153,7 @@ class IndivScores(object):
         n = self.getn()
 
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND brakeev = TRUE;")
-        temp = IndivScores.connect(query, "display")
+        temp = self.connect(query, "display")
 
         if (n != 0):
             result = (temp[0] / n)
@@ -167,7 +167,7 @@ class IndivScores(object):
         n = self.getn()
 
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND crashev = TRUE;")
-        temp = IndivScores.connect(query, "display")
+        temp = self.connect(query, "display")
 
         if (n != 0):
             result = (temp[0] / n)
@@ -180,7 +180,7 @@ class IndivScores(object):
     def getAvgSpeed(self):
 
         query = str("SELECT AVG(speed) FROM usecase WHERE typeID = '" + str(self.id) + "';")
-        temp = IndivScores.connect(query, "display")
+        temp = self.connect(query, "display")
         result = int(temp[0])
 
         return result
@@ -188,7 +188,7 @@ class IndivScores(object):
     def getEnginePerf(self):
         """Function below calculate positive values – Use Case 3"""
         query = str("SELECT AVG(performance) FROM usecase WHERE typeID = '" + str(self.id) + "';")
-        temp = IndivScores.connect(query, "display")
+        temp = self.connect(query, "display")
         result = int(temp[0])
 
         return result
