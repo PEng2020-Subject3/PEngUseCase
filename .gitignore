@@ -1,7 +1,13 @@
+# faas-cli directories - template store and build
 template
 build
 
+# IDEs
+.idea
 
+# mac
 .DS_Store
+
+# python and pyenv
 venv
 __pycache__
