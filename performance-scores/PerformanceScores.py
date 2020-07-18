@@ -2,7 +2,7 @@
 from urllib.request import urlopen
 import json
 import os
-import logging
+import sys
 
 
 class PerformanceScores(object):
@@ -30,11 +30,12 @@ class PerformanceScores(object):
 
         try:
             policy = str(os.environ['openfaas.policy.name'])
-            logging.debug('invoking indiv-performancescores with policy: %s', policy)
+            print('invoking indiv-performancescores with policy: %s', policy, file=sys.stderr)
             url = str("http://gateway.openfaas:8080/function/indiv-performancescores?policy=" + str(policy))
         except:
             url = str("http://gateway.openfaas:8080/function/indiv-performancescores")
 
+        print('invoking indiv-performancescores', file=sys.stderr)
         rv = urlopen(url, data=binary_req)
         temp = rv.read().decode('utf-8')
         res = json.loads(temp)

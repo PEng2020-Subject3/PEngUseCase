@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from .PerformanceScores import PerformanceScores
 import json
+import sys
 
 
 def handle(req):
@@ -12,6 +13,7 @@ def handle(req):
     except:
         return Exception(400, "BadRequest", "Example input:", '{"typeID": "prius", "function": "genPerformanceScore"}')
 
+    print("handle request", file=sys.stderr)
     temp = PerformanceScores(method, typeID)
     output = temp.main()
 
