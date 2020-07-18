@@ -6,7 +6,7 @@ functions:
   performance-scores:
     lang: python3
     handler: ./performance-scores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:0.1.2
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:0.1.3
     environment:
       write_timeout: 30
       write_debug: true
