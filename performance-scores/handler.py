@@ -1,12 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 from .PerformanceScores import PerformanceScores
 import json
 
-'''Handles PerformanceScore Function'''
+
 def handle(req):
-    json_req = json.loads(req)
-    typeID = json_req["typeID"]
-    method = json_req["function"]
+    """Handles PerformanceScore Function"""
+    try:
+        json_req = json.loads(req)
+        typeID = json_req["typeID"]
+        method = json_req["function"]
+    except:
+        raise Exception(400, "BadRequest", "Example input:", '{"typeID": "prius", "function": "genPerformanceScore"}')
 
     temp = PerformanceScores(method, typeID)
     output = temp.main()
