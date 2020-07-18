@@ -6,7 +6,7 @@ functions:
   indiv-performancescores:
     lang: python3-debian
     handler: ./indiv-performancescores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:0.1.0
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:0.1.4
     environment:
       write_timeout: 30
       write_debug: true

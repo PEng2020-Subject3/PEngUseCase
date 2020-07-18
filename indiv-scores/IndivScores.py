@@ -139,7 +139,7 @@ class IndivScores(object):
         n = self.getn()
 
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND turnev = TRUE;")
-        temp = self.connect(query, "display", file=sys.stderr)
+        temp = self.connect(query, "display")
 
         if (n != 0):
             result = (temp[0] / n)
