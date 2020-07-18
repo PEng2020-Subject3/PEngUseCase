@@ -1,67 +1,71 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 from urllib.request import urlopen
 import json
 import os
+import logging
 
-'''Functions in this class create a json containing respective information'''
+
 class PerformanceScores(object):
-	def __init__(self, method, typeID):
-		self.method = method
-		self.typeID = typeID
+    """Functions in this class create a json containing respective information"""
 
-	def main(self):
-		if (self.method == "genPerformanceScore"):
-			return self.genPerformanceScore()
-		else:
-			print("Unknown Method!")
+    def __init__(self, method, typeID):
+        self.method = method
+        self.typeID = typeID
 
-	def getData(self):
-		req_raw = {
-			'id': self.typeID,
-			'scoretype': 'performancescore'
-		}
+    def main(self):
+        if self.method == "genPerformanceScore":
+            return self.genPerformanceScore()
+        else:
+            print("Unknown Method!")
 
-		req = json.dumps(req_raw, indent=2)
+    def getData(self):
+        req_raw = {
+            'id': self.typeID,
+            'scoretype': 'performancescore'
+        }
 
-		binary_req = req.encode('utf-8')
+        req = json.dumps(req_raw, indent=2)
 
-		try:
-			policy = str(os.environ['openfaas.policy.name'])
-			url = str("http://gateway.openfaas:8080/function/indiv-performancescores?policy=" + str(policy))
-		except:
-			url = str("http://gateway.openfaas:8080/function/indiv-performancescores")
+        binary_req = req.encode('utf-8')
 
-		rv = urlopen(url, data=binary_req)
-		temp = rv.read().decode('utf-8')
-		res = json.loads(temp)
-		rv.close()
+        try:
+            policy = str(os.environ['openfaas.policy.name'])
+            logging.debug('invoking indiv-performancescores with policy: %s', policy)
+            url = str("http://gateway.openfaas:8080/function/indiv-performancescores?policy=" + str(policy))
+        except:
+            url = str("http://gateway.openfaas:8080/function/indiv-performancescores")
 
-		self.logs = res["logs"]
-		self.speedscore = res["speedscore"]
-		self.turnscore = res["turnscore"]
-		self.brakescore = res["brakescore"]
-		self.crashscore = res["crashscore"]
-		self.avgspeed = res["avgspeed"]
-		self.engperf = res["engperf"]
+        rv = urlopen(url, data=binary_req)
+        temp = rv.read().decode('utf-8')
+        res = json.loads(temp)
+        rv.close()
 
-	def genPerformanceScore(self):
-		self.getData()
+        self.logs = res["logs"]
+        self.speedscore = res["speedscore"]
+        self.turnscore = res["turnscore"]
+        self.brakescore = res["brakescore"]
+        self.crashscore = res["crashscore"]
+        self.avgspeed = res["avgspeed"]
+        self.engperf = res["engperf"]
 
-		uc_2raw = {
-			'general': {
-				'typeID': self.typeID,
-				'logs': self.logs
-			},
-			'scores': {
-				'performancescore': self.engperf,
-				'speedscore': self.speedscore,
-				'turnscore': self.turnscore,
-				'brakescore': self.brakescore,
-				'crashscore': self.crashscore,
-				'avgspeed': self.avgspeed
-			}
-		}
+    def genPerformanceScore(self):
+        self.getData()
 
-		uc_2 = json.dumps(uc_2raw, indent=2)
+        uc_2raw = {
+            'general': {
+                'typeID': self.typeID,
+                'logs': self.logs
+            },
+            'scores': {
+                'performancescore': self.engperf,
+                'speedscore': self.speedscore,
+                'turnscore': self.turnscore,
+                'brakescore': self.brakescore,
+                'crashscore': self.crashscore,
+                'avgspeed': self.avgspeed
+            }
+        }
 
-		return uc_2
+        uc_2 = json.dumps(uc_2raw, indent=2)
+
+        return uc_2
