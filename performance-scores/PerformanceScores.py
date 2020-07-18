@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from urllib.request import urlopen
+from socket import timeout
 import json
 import os
 import sys
@@ -36,7 +37,12 @@ class PerformanceScores(object):
             url = str("http://gateway.openfaas:8080/function/indiv-performancescores")
 
         print('invoking indiv-performancescores', file=sys.stderr)
-        rv = urlopen(url, data=binary_req)
+        try:
+            # if it does not respond in time, the function might be just deployed
+            rv = urlopen(url, data=binary_req, timeout=10)
+        except timeout:
+            # try again - the function should respond now
+            rv = urlopen(url, data=binary_req)
         temp = rv.read().decode('utf-8')
         res = json.loads(temp)
         rv.close()
