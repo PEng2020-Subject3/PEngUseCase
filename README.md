@@ -10,7 +10,7 @@ Use cases covered with these functions are the following:
 
 ## Function Descriptions
 
-Basically, this repository encompasses four functions (i.e. python modules): two functions for database access and two functions for score calculations and output JSON packing (two functions for pseudonymous and personal data identifier input respectively). The functions are hierachically organized so that one has to call the driverscores.py or `performancescores.py` to get information implicitly supplied from the respective `indiv-...scores.py`. After having deployed both functions for e.g. driver score calculation, the `driverscores.py` calls the `indiv-driverscores.py` to get information required for output scores.
+Basically, this repository encompasses four functions (i.e. python modules): two functions for database access and two functions for score calculations and output JSON packing (two functions for pseudonymous and anonymous identifier input respectively). The functions are hierachically organized so that one has to call the driverscores.py or `performancescores.py` to get information implicitly supplied from the respective `indiv-...scores.py`. After having deployed both functions for e.g. driver score calculation, the `driverscores.py` calls the `indiv-driverscores.py` to get information required for output scores.
 
 While the `driverscores.py` processes personal data, the `performancescores.py` processes pseudomized data. Hence, respective ID inputs differ accordingly.
 
