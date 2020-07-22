@@ -5,9 +5,9 @@ import os
 
 '''Functions in this class create a json containing respective information'''
 class DriverScores(object):
-	def __init__(self, method, persID):
+	def __init__(self, method, sensor_ID):
 		self.method = method
-		self.persID = persID
+		self.sensor_ID = sensor_ID
 
 	def main(self):
 		if (self.method == "genDriverScore"):
@@ -19,7 +19,7 @@ class DriverScores(object):
 
 	def getData(self):
 		req_raw = {
-			'id': self.persID,
+			'sensor_ID': self.sensor_ID,
 			'scoretype': "driverscore"
 		}
 
@@ -50,7 +50,7 @@ class DriverScores(object):
 		score = self.getDriverScore()
 
 		uc_1raw = {
-			'id': self.persID,
+			'sensor_ID': self.sensor_ID,
 			'driverscore': score
 		}
 
@@ -71,7 +71,7 @@ class DriverScores(object):
 		driverscore = self.getDriverScore()
 
 		uc_13raw = {
-			'id': self.persID,
+			'sensor_ID': self.sensor_ID,
 			'driverscore': driverscore,
 			'avgspeed': self.avgspeed
 		}

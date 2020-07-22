@@ -9,9 +9,9 @@ import sys
 class PerformanceScores(object):
     """Functions in this class create a json containing respective information"""
 
-    def __init__(self, method, typeID):
+    def __init__(self, method, sensor_ID):
         self.method = method
-        self.typeID = typeID
+        self.sensor_ID = sensor_ID
 
     def main(self):
         if self.method == "genPerformanceScore":
@@ -21,7 +21,7 @@ class PerformanceScores(object):
 
     def getData(self):
         req_raw = {
-            'id': self.typeID,
+            'sensor_ID': self.sensor_ID,
             'scoretype': 'performancescore'
         }
 
@@ -60,7 +60,7 @@ class PerformanceScores(object):
 
         uc_2raw = {
             'general': {
-                'typeID': self.typeID,
+                'sensor_ID': self.sensor_ID,
                 'logs': self.logs
             },
             'scores': {

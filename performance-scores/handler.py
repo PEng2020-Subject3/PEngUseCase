@@ -8,16 +8,16 @@ def handle(req):
     """Handles PerformanceScore Function"""
     try:
         json_req = json.loads(req)
-        typeID = json_req["typeID"]
+        sensor_ID = json_req["sensor_ID"]
         method = json_req["function"]
     except:
-        return Exception(400, "BadRequest", "Example input:", '{"typeID": "prius", "function": "genPerformanceScore"}')
+        return Exception(400, "BadRequest", "Example input:", '{"sensor_ID": "prius", "function": "genPerformanceScore"}')
 
     print("handle request", file=sys.stderr)
-    temp = PerformanceScores(method, typeID)
+    temp = PerformanceScores(method, sensor_ID)
     output = temp.main()
 
     return output
 
 # Example input:
-# {"typeID": "prius", "function": "genPerformanceScore"}
+# {"sensor_ID": "prius", "function": "genPerformanceScore"}

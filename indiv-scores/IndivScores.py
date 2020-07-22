@@ -13,8 +13,8 @@ class IndivScores(object):
     processed.
     """
 
-    def __init__(self, id, scoretype):
-        self.id = id
+    def __init__(self, sensor_ID, scoretype):
+        self.sensor_ID = sensor_ID
         self.scoretype = scoretype
 
     def main(self):
@@ -22,12 +22,14 @@ class IndivScores(object):
 
         if (self.scoretype == "performancescore"):
             return self.getPerfscoreData()
+        elif (self.scoretype == "driverscore"):
+			return self.getDriverscoreData()
         else:
             print("Undefined Data Requested.", file=sys.stderr)
             exit()
 
     # based on https://www.postgresqltutorial.com/postgresql-python/connect/
-    def config(self, filename='database.ini', section='postgresql'):
+    def config():#self, filename='database.ini', section='postgresql'):
         # create a parser
         parser = ConfigParser()
         # read config file
@@ -79,6 +81,16 @@ class IndivScores(object):
             if conn is not None:
                 conn.close()
 
+    '''Packs JSON with use case-specific data '''
+    def getDriverscoreData(self):
+        self.speedscore = self.getSpeedVal()
+        self.turnscore = self.getTurnVal()
+        self.brakescore = self.getBrakeVal()
+        self.crashscore = self.getCrashVal()
+        self.avgspeed = self.getAvgSpeed()
+
+        return self.packdriveJSON()
+
     def getPerfscoreData(self):
         """Packs JSON with use case-specific data """
         self.logs = self.getn()
@@ -89,9 +101,22 @@ class IndivScores(object):
         self.avgspeed = self.getAvgSpeed()
         self.engperf = self.getEnginePerf()
 
-        return self.packJSON()
+        return self.packperfJSON()
 
-    def packJSON(self):
+    def packdriveJSON(self):
+		res_raw = {
+			'speedscore': self.speedscore,
+			'turnscore': self.turnscore,
+			'brakescore': self.brakescore,
+			'crashscore': self.crashscore,
+			'avgspeed': self.avgspeed
+		}
+
+		res = json.dumps(res_raw, indent=2)
+
+		return res
+
+    def packperfJSON(self):
         res_raw = {
             'logs': self.logs,
             'speedscore': self.speedscore,
@@ -108,14 +133,14 @@ class IndivScores(object):
 
     def initTables(self):
         """Create tables if they do not exist yet"""
-        query = str("CREATE TABLE IF NOT EXISTS usecase (persID int PRIMARY KEY,typeID varchar (50) NOT NULL,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
+        query = str("CREATE TABLE IF NOT EXISTS usecase (sensor_ID varchar (50) PRIMARY KEY,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
         self.connect(query, "create")
-        query = "INSERT INTO usecase (persID, typeID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES (666, 'prius', 33, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
+        query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('prius', 33, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
         self.connect(query, "display")
 
     def getn(self):
         """Get total amount of values, while values are received every XX seconds"""
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "';")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
         result = self.connect(query, "display")
 
         return result[0]
@@ -124,7 +149,7 @@ class IndivScores(object):
         """Functions below calculate values between 0 and 1 – Use Cases 1 & 3"""
         n = self.getn()
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND speedev = TRUE;")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND speedev = TRUE;")
         temp = self.connect(query, "display")
 
         if (n != 0):
@@ -138,7 +163,7 @@ class IndivScores(object):
     def getTurnVal(self):
         n = self.getn()
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND turnev = TRUE;")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND turnev = TRUE;")
         temp = self.connect(query, "display")
 
         if (n != 0):
@@ -152,7 +177,7 @@ class IndivScores(object):
     def getBrakeVal(self):
         n = self.getn()
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND brakeev = TRUE;")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND brakeev = TRUE;")
         temp = self.connect(query, "display")
 
         if (n != 0):
@@ -166,7 +191,7 @@ class IndivScores(object):
     def getCrashVal(self):
         n = self.getn()
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.id) + "'AND crashev = TRUE;")
+        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND crashev = TRUE;")
         temp = self.connect(query, "display")
 
         if (n != 0):
@@ -179,7 +204,7 @@ class IndivScores(object):
 
     def getAvgSpeed(self):
 
-        query = str("SELECT AVG(speed) FROM usecase WHERE typeID = '" + str(self.id) + "';")
+        query = str("SELECT AVG(speed) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
         temp = self.connect(query, "display")
         result = int(temp[0])
 
@@ -187,7 +212,7 @@ class IndivScores(object):
 
     def getEnginePerf(self):
         """Function below calculate positive values – Use Case 3"""
-        query = str("SELECT AVG(performance) FROM usecase WHERE typeID = '" + str(self.id) + "';")
+        query = str("SELECT AVG(performance) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
         temp = self.connect(query, "display")
         result = int(temp[0])
 

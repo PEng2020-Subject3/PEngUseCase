@@ -13,5 +13,5 @@ def handle(req):
 
     return output
 
-# Example Input: 
-# {"persID": 666, "function": "genDriverScore"}
+# Example Input:
+# {"sensor_ID": "666", "function": "genDriverScore"}
