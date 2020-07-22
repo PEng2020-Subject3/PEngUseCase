@@ -4,6 +4,7 @@ from socket import timeout
 import json
 import os
 import sys
+import time
 
 
 class PerformanceScores(object):
@@ -42,9 +43,10 @@ class PerformanceScores(object):
         print('invoking indiv-performancescores', file=sys.stderr)
         try:
             # if it does not respond in time, the function might be just deployed
-            rv = urlopen(url, data=binary_req, timeout=10)
+            rv = urlopen(url, data=binary_req, timeout=15)
         except timeout:
-            # try again - the function should respond now
+            # try again after 15s - the function should respond now
+            time.sleep(15)
             rv = urlopen(url, data=binary_req)
         temp = rv.read().decode('utf-8')
         res = json.loads(temp)

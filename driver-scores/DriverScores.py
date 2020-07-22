@@ -1,10 +1,13 @@
 #!/usr/bin/python
 from urllib.request import urlopen
+from socket import timeout
 import json
 import os
+import time
+
 
 class DriverScores(object):
-"""Functions in this class create a json containing respective information"""
+	"""Functions in this class create a json containing respective information"""
 	def __init__(self, method, sensor_ID):
 		self.method = method
 		self.sensor_ID = sensor_ID
@@ -18,7 +21,7 @@ class DriverScores(object):
 			print("Unknown Method!")
 
 	def getData(self):
-	"""Pack and send request to indiv-scores....py and receive response with requested data"""
+		"""Pack and send request to indiv-scores....py and receive response with requested data"""
 		req_raw = {
 			'sensor_ID': self.sensor_ID,
 			'scoretype': "driverscore"
@@ -34,7 +37,14 @@ class DriverScores(object):
 		except:
 			url = str("http://gateway.openfaas:8080/function/indiv-driverscores")
 
-		rv = urlopen(url, data=binary_req)
+		try:
+			# if it does not respond in time, the function might be just deployed
+			rv = urlopen(url, data=binary_req, timeout=15)
+		except timeout:
+			# try again after 15s - the function should respond now
+			time.sleep(15)
+			rv = urlopen(url, data=binary_req)
+
 		temp = rv.read().decode('utf-8')
 		res = json.loads(temp)
 		rv.close()
@@ -46,7 +56,7 @@ class DriverScores(object):
 		self.avgspeed = res["avgspeed"]
 
 	def genDriverScore(self):
-	"""Output Data – Use Case 1"""
+		"""Output Data – Use Case 1"""
 		self.getData()
 		score = self.getDriverScore()
 
@@ -60,14 +70,14 @@ class DriverScores(object):
 		return uc_1
 
 	def getDriverScore(self):
-	"""Calulate driver score – Use Cases 1 & 3"""
+		"""Calulate driver score – Use Cases 1 & 3"""
 		driverscore = ((float(0.2) * float(self.speedscore)) + (float(0.2) * float(self.turnscore)) + (float(0.2) * float(self.brakescore)) + (float(0.4) * float(self.crashscore)))
 
 		return driverscore
 
 	def genDriverScoreFleet(self):
-	"""Output Information – Use Case 3"""
-		#car type aggregation -- fleet manager can call data for his fleet id/typeID
+		"""Output Information – Use Case 3"""
+		# car type aggregation -- fleet manager can call data for his fleet id/typeID
 		self.getData()
 		driverscore = self.getDriverScore()
 
