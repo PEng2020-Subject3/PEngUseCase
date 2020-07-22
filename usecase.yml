@@ -6,7 +6,7 @@ functions:
   performance-scores:
     lang: python3
     handler: ./performance-scores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:latest
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:aws
     environment:
       write_timeout: 30
       write_debug: true
@@ -14,11 +14,11 @@ functions:
   driver-scores:
     lang: python3
     handler: ./driver-scores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/driver-scores:latest
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/driver-scores:aws
   indiv-performancescores:
     lang: python3-debian
     handler: ./indiv-performancescores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:latest
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:aws
     environment:
       write_timeout: 30
       write_debug: true
@@ -30,7 +30,7 @@ functions:
   indiv-driverscores:
     lang: python3-debian
     handler: ./indiv-driverscores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-driverscores:latest
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-driverscores:aws
     environment:
       db_host: usecase-postgres-db-postgresql
       db_name: postgres
