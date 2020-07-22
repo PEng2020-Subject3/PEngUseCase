@@ -4,7 +4,7 @@ import json
 
 
 def handle(req):
-"""Handles DriverScore Function"""
+    """Handles DriverScore Function"""
     try:
         json_req = json.loads(req)
         sensor_ID = json_req["sensor_ID"]

@@ -5,8 +5,7 @@ import sys
 
 
 def handle(req):
-"""Handles PerformanceScore Function"""
-
+    """Handles PerformanceScore Function"""
     try:
         json_req = json.loads(req)
         sensor_ID = json_req["sensor_ID"]
