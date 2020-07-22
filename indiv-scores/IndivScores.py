@@ -28,17 +28,15 @@ class IndivScores(object):
             print("Undefined Data Requested.", file=sys.stderr)
             exit()
 
-    def config(self):# filename='database.ini', section='postgresql'):
+    def config(self):
         """Configure Database Access using Environment variables"""
         # based on https://www.postgresqltutorial.com/postgresql-python/connect/
 
-        parser = ConfigParser()
-        # # read config file
-        # parser.read(filename)
-        db_host = str(os.environ['db_host'])
-        db_name = str(os.environ['db_name'])
-        db_user = str(os.environ['db_user'])
-        db_password = str(os.environ['db_password'])
+        # get configuration from env or use default
+        db_host = str(os.getenv('db_host', 'usecase-postgres-db-postgresql'))
+        db_name = str(os.getenv('db_name', 'postgres'))
+        db_user = str(os.getenv('db_user', 'postgres'))
+        db_password = str(os.getenv('db_password', '3BDAJjFHOA'))
 
         db = {
             "host": db_host,
