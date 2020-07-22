@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from .IndivScores import IndivScores
 import json
-
+import sys
 
 def handle(req):
     """Handles DriverScore Function"""
