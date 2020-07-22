@@ -6,42 +6,22 @@ functions:
   performance-scores-gdpr:
     lang: python3
     handler: ./performance-scores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:aws
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:aws-1
     environment:
       write_timeout: 30
       write_debug: true
       combine_output: false
-      openfaas.policy.name: gdpr
-    constraints:
-      - "openfaas.policy/privacy-level=1"
-  driver-scores-gdpr:
-    lang: python3
-    handler: ./driver-scores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/driver-scores:aws
-    environment:
       openfaas.policy.name: gdpr
     constraints:
       - "openfaas.policy/privacy-level=1"
   indiv-performancescores-gdpr:
     lang: python3-debian
     handler: ./indiv-performancescores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:aws
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:aws-1
     environment:
       write_timeout: 30
       write_debug: true
       combine_output: false
-      db_host: usecase-postgres-db-postgresql
-      db_name: postgres
-      db_user: postgres
-      db_password: 3BDAJjFHOA
-      openfaas.policy.name: gdpr
-    constraints:
-      - "openfaas.policy/privacy-level=1"
-  indiv-driverscores-gdpr:
-    lang: python3-debian
-    handler: ./indiv-driverscores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-driverscores:aws
-    environment:
       db_host: usecase-postgres-db-postgresql
       db_name: postgres
       db_user: postgres
