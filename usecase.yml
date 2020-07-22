@@ -1,0 +1,38 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: http://a489ca8c99162488eb7526720cc82431-290010750.us-east-1.elb.amazonaws.com:8080
+functions:
+  performance-scores:
+    lang: python3
+    handler: ./performance-scores
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/performance-scores:latest
+    environment:
+      write_timeout: 30
+      write_debug: true
+      combine_output: false
+  driver-scores:
+    lang: python3
+    handler: ./driver-scores
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/driver-scores:latest
+  indiv-performancescores:
+    lang: python3-debian
+    handler: ./indiv-performancescores
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:latest
+    environment:
+      write_timeout: 30
+      write_debug: true
+      combine_output: false
+      db_host: usecase-postgres-db-postgresql
+      db_name: postgres
+      db_user: postgres
+      db_password: 3BDAJjFHOA
+  indiv-driverscores:
+    lang: python3-debian
+    handler: ./indiv-driverscores
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-driverscores:latest
+    environment:
+      db_host: usecase-postgres-db-postgresql
+      db_name: postgres
+      db_user: postgres
+      db_password: 3BDAJjFHOA
