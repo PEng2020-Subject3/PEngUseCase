@@ -17,7 +17,7 @@ functions:
   indiv-performancescores-gdpr:
     lang: python3-debian
     handler: ./indiv-performancescores
-    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:aws-1
+    image: gitlab-registry.tubit.tu-berlin.de/stendler/faas-policy-provider/functions/indiv-performancescores:aws-2
     environment:
       write_timeout: 30
       write_debug: true
