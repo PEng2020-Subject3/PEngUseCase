@@ -138,7 +138,7 @@ class IndivScores(object):
         query = str("CREATE TABLE IF NOT EXISTS usecase (sensor_ID varchar (50) PRIMARY KEY,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
         self.connect(query, "create")
         query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('prius', 33, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
-        self.connect(query, "display")
+        self.connect(query, "insert")
 
     def getn(self):
         """Get total amount of values, while values are received every XX seconds"""
