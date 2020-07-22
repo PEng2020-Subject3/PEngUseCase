@@ -2,11 +2,14 @@
 from .DriverScores import DriverScores
 import json
 
-'''Handles DriverScore Function'''
 def handle(req):
-    json_req = json.loads(req)
-    persID = json_req["persID"]
-    method = json_req["function"]
+    """Handles DriverScore Function"""
+    try:
+        json_req = json.loads(req)
+        sensor_ID = json_req["sensor_ID"]
+        method = json_req["function"]
+    except:
+        return Exception(400, "BadRequest", "Example input:", '{"sensor_ID": "666", "function": "genDriverScore"}')
 
     temp = DriverScores(method, persID)
     output = temp.main()

@@ -9,8 +9,8 @@ import sys
 
 class IndivScores(object):
     """
-    This class calculates individual scores based on information received from a database that can be further
-    processed.
+    This class calculates individual scores based on information received from a
+    database that can be further processed.
     """
 
     def __init__(self, sensor_ID, scoretype):
@@ -28,18 +28,18 @@ class IndivScores(object):
             print("Undefined Data Requested.", file=sys.stderr)
             exit()
 
-    # based on https://www.postgresqltutorial.com/postgresql-python/connect/
     def config():#self, filename='database.ini', section='postgresql'):
-        # create a parser
+    """Configure Database Access using Environment variables"""
+    # based on https://www.postgresqltutorial.com/postgresql-python/connect/
+
         parser = ConfigParser()
-        # read config file
-        parser.read(filename)
+        # # read config file
+        # parser.read(filename)
         db_host = str(os.environ['db_host'])
         db_name = str(os.environ['db_name'])
         db_user = str(os.environ['db_user'])
         db_password = str(os.environ['db_password'])
 
-        # get section, default to postgresql
         db = {
             "host": db_host,
             "database": db_name,
@@ -49,21 +49,19 @@ class IndivScores(object):
 
         return db
 
-    # based on https://www.postgresqltutorial.com/postgresql-python/connect/
+
     def connect(self, query, mode):
-        """Connect to the PostgreSQL database server"""
+    """Connect to the PostgreSQL database server"""
+    # based on https://www.postgresqltutorial.com/postgresql-python/connect/
+
         conn = None
         try:
-            # read connection parameters
+            # read connection parameters and connect to db
             params = self.config()
-
-            # connect to the PostgreSQL server
             conn = psycopg2.connect(**params)
 
-            # create a cursor
+            # create a cursor and execute a statement
             cur = conn.cursor()
-
-            # execute a statement
             cur.execute(query)
             db_version = None
 
@@ -81,8 +79,9 @@ class IndivScores(object):
             if conn is not None:
                 conn.close()
 
-    '''Packs JSON with use case-specific data '''
+
     def getDriverscoreData(self):
+
         self.speedscore = self.getSpeedVal()
         self.turnscore = self.getTurnVal()
         self.brakescore = self.getBrakeVal()
@@ -92,7 +91,7 @@ class IndivScores(object):
         return self.packdriveJSON()
 
     def getPerfscoreData(self):
-        """Packs JSON with use case-specific data """
+
         self.logs = self.getn()
         self.speedscore = self.getSpeedVal()
         self.turnscore = self.getTurnVal()
@@ -104,6 +103,8 @@ class IndivScores(object):
         return self.packperfJSON()
 
     def packdriveJSON(self):
+    """Packs JSON with use case-specific data """
+
 		res_raw = {
 			'speedscore': self.speedscore,
 			'turnscore': self.turnscore,
@@ -117,6 +118,8 @@ class IndivScores(object):
 		return res
 
     def packperfJSON(self):
+    """Packs JSON with use case-specific data """
+
         res_raw = {
             'logs': self.logs,
             'speedscore': self.speedscore,
@@ -132,21 +135,25 @@ class IndivScores(object):
         return res
 
     def initTables(self):
-        """Create tables if they do not exist yet"""
+    """Create tables if they do not exist yet"""
+
         query = str("CREATE TABLE IF NOT EXISTS usecase (sensor_ID varchar (50) PRIMARY KEY,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
         self.connect(query, "create")
         query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('prius', 33, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
         self.connect(query, "display")
 
     def getn(self):
-        """Get total amount of values, while values are received every XX seconds"""
+    """Get total amount of values, while values are received every XX seconds"""
+
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
         result = self.connect(query, "display")
 
         return result[0]
 
+    """
+    Functions below calculate values between 0 and 1
+    """
     def getSpeedVal(self):
-        """Functions below calculate values between 0 and 1 – Use Cases 1 & 3"""
         n = self.getn()
 
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND speedev = TRUE;")
@@ -210,8 +217,11 @@ class IndivScores(object):
 
         return result
 
+    """
+    Function below calculates positive values – Use Case 2
+    """
     def getEnginePerf(self):
-        """Function below calculate positive values – Use Case 3"""
+
         query = str("SELECT AVG(performance) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
         temp = self.connect(query, "display")
         result = int(temp[0])

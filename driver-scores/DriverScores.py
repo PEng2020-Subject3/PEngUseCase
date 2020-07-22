@@ -3,8 +3,8 @@ from urllib.request import urlopen
 import json
 import os
 
-'''Functions in this class create a json containing respective information'''
 class DriverScores(object):
+"""Functions in this class create a json containing respective information"""
 	def __init__(self, method, sensor_ID):
 		self.method = method
 		self.sensor_ID = sensor_ID
@@ -18,6 +18,7 @@ class DriverScores(object):
 			print("Unknown Method!")
 
 	def getData(self):
+	"""Pack and send request to indiv-scores....py and receive response with requested data"""
 		req_raw = {
 			'sensor_ID': self.sensor_ID,
 			'scoretype': "driverscore"
@@ -44,8 +45,8 @@ class DriverScores(object):
 		self.crashscore = res["crashscore"]
 		self.avgspeed = res["avgspeed"]
 
-	'''Dashboard Information – Use Case 1'''
 	def genDriverScore(self):
+	"""Output Data – Use Case 1"""
 		self.getData()
 		score = self.getDriverScore()
 
@@ -58,14 +59,14 @@ class DriverScores(object):
 
 		return uc_1
 
-	'''Calulate driver score for certain time period'''
 	def getDriverScore(self):
+	"""Calulate driver score – Use Cases 1 & 3"""
 		driverscore = ((float(0.2) * float(self.speedscore)) + (float(0.2) * float(self.turnscore)) + (float(0.2) * float(self.brakescore)) + (float(0.4) * float(self.crashscore)))
 
 		return driverscore
 
-	'''Dashboard Information – Use Cases 1 & 3'''
 	def genDriverScoreFleet(self):
+	"""Output Information – Use Case 3"""
 		#car type aggregation -- fleet manager can call data for his fleet id/typeID
 		self.getData()
 		driverscore = self.getDriverScore()

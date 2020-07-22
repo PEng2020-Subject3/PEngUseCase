@@ -2,11 +2,16 @@
 from .IndivScores import IndivScores
 import json
 
-'''Handles DriverScore Function'''
+
 def handle(req):
-    json_req = json.loads(req)
-    sensor_ID = json_req["sensor_ID"]
-    scoretype = json_req["scoretype"]
+"""Handles DriverScore Function"""
+    try:
+        json_req = json.loads(req)
+        sensor_ID = json_req["sensor_ID"]
+        scoretype = json_req["scoretype"]
+    except:
+        print("Bad formatted input %s", req, file=sys.stderr)
+        return Exception(400, 'Bad Request', 'Example Input:', '{"sensor_ID": "666","scoretype": "driverscore"}')
 
     temp = IndivScores(sensor_ID, scoretype)
     output = temp.main()
@@ -14,4 +19,4 @@ def handle(req):
     return output
 
 # Example Input:
-# {"sensor_ID": 666,"scoretype": "driverscore"}
+# {"sensor_ID": "666","scoretype": "driverscore"}

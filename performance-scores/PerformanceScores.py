@@ -7,7 +7,9 @@ import sys
 
 
 class PerformanceScores(object):
-    """Functions in this class create a json containing respective information"""
+    """
+    Functions in this class create a json containing respective information
+    """
 
     def __init__(self, method, sensor_ID):
         self.method = method
@@ -20,6 +22,7 @@ class PerformanceScores(object):
             print("Unknown Method!")
 
     def getData(self):
+    """Pack and send request to indiv-scores....py and receive response with requested data"""
         req_raw = {
             'sensor_ID': self.sensor_ID,
             'scoretype': 'performancescore'
@@ -56,6 +59,7 @@ class PerformanceScores(object):
         self.engperf = res["engperf"]
 
     def genPerformanceScore(self):
+    """Output Data – Use Case 3"""
         self.getData()
 
         uc_2raw = {
