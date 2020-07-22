@@ -139,6 +139,12 @@ class IndivScores(object):
         self.connect(query, "create")
         query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('prius', 33, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
         self.connect(query, "insert")
+        query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('smart', 31, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
+        self.connect(query, "insert")
+        query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('angela merte', 56, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
+        self.connect(query, "insert")
+        query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('lambo', 78, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
+        self.connect(query, "insert")
 
     def getn(self):
         """Get total amount of values, while values are received every XX seconds"""
