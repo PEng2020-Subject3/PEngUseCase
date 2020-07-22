@@ -23,14 +23,14 @@ class IndivScores(object):
         if (self.scoretype == "performancescore"):
             return self.getPerfscoreData()
         elif (self.scoretype == "driverscore"):
-			return self.getDriverscoreData()
+            return self.getDriverscoreData()
         else:
             print("Undefined Data Requested.", file=sys.stderr)
             exit()
 
-    def config():#self, filename='database.ini', section='postgresql'):
-    """Configure Database Access using Environment variables"""
-    # based on https://www.postgresqltutorial.com/postgresql-python/connect/
+    def config(self):# filename='database.ini', section='postgresql'):
+        """Configure Database Access using Environment variables"""
+        # based on https://www.postgresqltutorial.com/postgresql-python/connect/
 
         parser = ConfigParser()
         # # read config file
@@ -51,8 +51,8 @@ class IndivScores(object):
 
 
     def connect(self, query, mode):
-    """Connect to the PostgreSQL database server"""
-    # based on https://www.postgresqltutorial.com/postgresql-python/connect/
+        """Connect to the PostgreSQL database server"""
+        # based on https://www.postgresqltutorial.com/postgresql-python/connect/
 
         conn = None
         try:
@@ -103,22 +103,22 @@ class IndivScores(object):
         return self.packperfJSON()
 
     def packdriveJSON(self):
-    """Packs JSON with use case-specific data """
+        """Packs JSON with use case-specific data """
 
-		res_raw = {
-			'speedscore': self.speedscore,
-			'turnscore': self.turnscore,
-			'brakescore': self.brakescore,
-			'crashscore': self.crashscore,
-			'avgspeed': self.avgspeed
-		}
+        res_raw = {
+            'speedscore': self.speedscore,
+            'turnscore': self.turnscore,
+            'brakescore': self.brakescore,
+            'crashscore': self.crashscore,
+            'avgspeed': self.avgspeed
+        }
 
-		res = json.dumps(res_raw, indent=2)
+        res = json.dumps(res_raw, indent=2)
 
-		return res
+        return res
 
     def packperfJSON(self):
-    """Packs JSON with use case-specific data """
+        """Packs JSON with use case-specific data """
 
         res_raw = {
             'logs': self.logs,
@@ -135,7 +135,7 @@ class IndivScores(object):
         return res
 
     def initTables(self):
-    """Create tables if they do not exist yet"""
+        """Create tables if they do not exist yet"""
 
         query = str("CREATE TABLE IF NOT EXISTS usecase (sensor_ID varchar (50) PRIMARY KEY,speed int,performance int,speedev boolean,brakeev boolean,turnev boolean,crashev boolean,targetdate date NOT NULL);")
         self.connect(query, "create")
@@ -143,7 +143,7 @@ class IndivScores(object):
         self.connect(query, "display")
 
     def getn(self):
-    """Get total amount of values, while values are received every XX seconds"""
+        """Get total amount of values, while values are received every XX seconds"""
 
         query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
         result = self.connect(query, "display")
