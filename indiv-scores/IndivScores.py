@@ -143,7 +143,7 @@ class IndivScores(object):
     def getn(self):
         """Get total amount of values, while values are received every XX seconds"""
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
+        query = str("SELECT COUNT(*) FROM usecase WHERE sensor_ID = '" + str(self.sensor_ID) + "';")
         result = self.connect(query, "display")
 
         return result[0]
@@ -154,7 +154,7 @@ class IndivScores(object):
     def getSpeedVal(self):
         n = self.getn()
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND speedev = TRUE;")
+        query = str("SELECT COUNT(*) FROM usecase WHERE sensor_ID = '" + str(self.sensor_ID) + "'AND speedev = TRUE;")
         temp = self.connect(query, "display")
 
         if (n != 0):
@@ -168,7 +168,7 @@ class IndivScores(object):
     def getTurnVal(self):
         n = self.getn()
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND turnev = TRUE;")
+        query = str("SELECT COUNT(*) FROM usecase WHERE sensor_ID = '" + str(self.sensor_ID) + "'AND turnev = TRUE;")
         temp = self.connect(query, "display")
 
         if (n != 0):
@@ -182,7 +182,7 @@ class IndivScores(object):
     def getBrakeVal(self):
         n = self.getn()
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND brakeev = TRUE;")
+        query = str("SELECT COUNT(*) FROM usecase WHERE sensor_ID = '" + str(self.sensor_ID) + "'AND brakeev = TRUE;")
         temp = self.connect(query, "display")
 
         if (n != 0):
@@ -196,7 +196,7 @@ class IndivScores(object):
     def getCrashVal(self):
         n = self.getn()
 
-        query = str("SELECT COUNT(*) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "'AND crashev = TRUE;")
+        query = str("SELECT COUNT(*) FROM usecase WHERE sensor_ID = '" + str(self.sensor_ID) + "'AND crashev = TRUE;")
         temp = self.connect(query, "display")
 
         if (n != 0):
@@ -209,7 +209,7 @@ class IndivScores(object):
 
     def getAvgSpeed(self):
 
-        query = str("SELECT AVG(speed) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
+        query = str("SELECT AVG(speed) FROM usecase WHERE sensor_ID = '" + str(self.sensor_ID) + "';")
         temp = self.connect(query, "display")
         result = int(temp[0])
 
@@ -220,7 +220,7 @@ class IndivScores(object):
     """
     def getEnginePerf(self):
 
-        query = str("SELECT AVG(performance) FROM usecase WHERE typeID = '" + str(self.sensor_ID) + "';")
+        query = str("SELECT AVG(performance) FROM usecase WHERE sensor_ID = '" + str(self.sensor_ID) + "';")
         temp = self.connect(query, "display")
         result = int(temp[0])
 
