@@ -11,7 +11,7 @@ def handle(req):
     except:
         return Exception(400, "BadRequest", "Example input:", '{"sensor_ID": "666", "function": "genDriverScore"}')
 
-    temp = DriverScores(method, persID)
+    temp = DriverScores(method, sensor_ID)
     output = temp.main()
 
     return output
