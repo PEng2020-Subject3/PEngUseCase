@@ -141,9 +141,9 @@ class IndivScores(object):
         self.connect(query, "insert")
         query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('smart', 31, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
         self.connect(query, "insert")
-        query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('angela merte', 56, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
+        query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('angelo merte', 56, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
         self.connect(query, "insert")
-        query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('lambo', 78, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
+        query = "INSERT INTO usecase (sensor_ID, speed, performance, speedev, brakeev, turnev, crashev, targetdate) VALUES ('porsche', 78, 99, true, false, true, false, '1997-02-27') ON CONFLICT DO NOTHING;"
         self.connect(query, "insert")
 
     def getn(self):
