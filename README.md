@@ -45,9 +45,9 @@ In order to deploy the functions, please execute the following steps:
 
 Now you can access the functions via the UI or URL using the following example inputs that can be found in the respective `handler.py` as well:
 
-Example input and output for `driverscores.py`: `{"persID": 666, "function": "genDriverScore"}`, XXX.
+Example input and output for `driverscores.py`: `{"sensor_ID": "666", "function": "genDriverScore"}`.
 
-Example input and output for `performancescores.py`: `{"typeID": "prius", "function": "genPerformanceScore"}`, XXX.
+Example input and output for `performancescores.py`: `{"sensor_ID": "prius", "function": "genPerformanceScore"}`.
 
 (Please note that you can only call driverscores or performancescores for data sets that actually exist in the linked database.)
 
