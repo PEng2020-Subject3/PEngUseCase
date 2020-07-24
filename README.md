@@ -21,9 +21,6 @@ to get information implicitly supplied from the respective `indiv-...scores.py`.
 for e.g. driver score calculation, the `driverscores.py` calls the `indiv-driverscores.py` to get information required 
 for output scores.
 
-While the `driverscores.py` processes personal data, the `performancescores.py` processes pseudonymized data. 
-Hence, respective ID inputs differ accordingly.
-
 ## Getting Started
 
 All four modules can be directly build, pushed and deployed as OpenFaaS functions.
